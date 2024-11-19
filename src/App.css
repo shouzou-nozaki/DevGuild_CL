@@ -1,23 +1,30 @@
-body {
-  font-family: Arial, sans-serif;
-  margin: 0;
-  padding: 0;
-  background-color: #f5f5f5;
-}
+/* ************************************* */
+/*            ヘッダー（共通）            */
+/* ************************************* */
 header {
   background-color: #333;
-  color: white;
+  color: #ffffff;
   padding: 15px;
   text-align: center;
+  
 }
+/* ************************************* */
+/*            コンテナ（共通）            */
+/* ************************************* */
 .container {
-  max-width: 800px;
+  font-family: Arial, sans-serif;
+  background-color: gray;
+  max-width: 1200px;
   margin: 20px auto;
   padding: 20px;
-  background: white;
+  background: gray;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
+
+/* ************************************* */
+/*        プロジェクト一覧テーブル         */
+/* ************************************* */
 table {
   width: 100%;
   border-collapse: collapse;
@@ -46,5 +53,56 @@ tr:hover {
   transition: background-color 0.3s ease;
 }
 .button:hover {
+  background-color: #0056b3;
+}
+
+/* ************************************* */
+/*        　　　　フッター                */
+/* ************************************* */
+
+.footer {
+  margin-top: 20px;
+  padding: 10px 0;
+  background-color: #f8f9fa;
+  text-align: center;
+  border-top: 1px solid #ddd;
+}
+
+.create-project {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 15px;
+  font-size: 1em;
+  color: white;
+  background-color: #28a745;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.edit-project {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 15px;
+  font-size: 1em;
+  color: white;
+  background-color: #007bff;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+.joined-project {
+  display: inline-block;
+  margin: 10px;
+  padding: 10px 15px;
+  font-size: 1em;
+  color: white;
+  background-color: #6c757d;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.footer-button:hover {
   background-color: #0056b3;
 }
