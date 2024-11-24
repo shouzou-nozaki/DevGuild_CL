@@ -27,7 +27,7 @@ function ProjectDetail() {
                     <h2>参加条件:</h2>
                     <ul>
                         {
-                            project.Requirements!.map((req: any) => {
+                            project.Requirements?.map((req: any) => {
                                 return (
                                     <li>{req}</li>
                                 );

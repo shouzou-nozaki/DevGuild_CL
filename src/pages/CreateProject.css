@@ -1,26 +1,30 @@
-/* ************************************* */
-/*            コンテナ（共通）            */
-/* ************************************* */
-.container {
-    max-width: 600px;
-    margin: 30px auto;
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
 
-h1 {
+
+/* ************************************* */
+/*          プロジェクト作成欄            */
+/* ************************************* */
+
+/* ページタイトル */
+.page_title {
     font-size: 1.8em;
     margin-bottom: 20px;
     text-align: center;
 }
-label {
+
+/* 各項目タイトル */
+.container_itemlist .container_item .item_title {
     display: block;
     margin-bottom: 8px;
     font-weight: bold;
 }
-input, textarea, select, button {
+
+/* 各項目入力欄共通 */
+.container_itemlist .container_item .projectName,
+.container_itemlist .container_item .reqruiteNumber,
+.container_itemlist .container_item .duedate,
+.container_itemlist .container_item .description,
+.container_itemlist .container_item .requirement,
+.container_itemlist .create {
     width: 90%;
     padding: 10px;
     margin-bottom: 20px;
@@ -28,20 +32,67 @@ input, textarea, select, button {
     border-radius: 5px;
     font-size: 1em;
 }
-textarea {
+
+/* 説明欄 */
+.container_itemlist .container_item .description {
     height: 100px;
     resize: vertical;
 }
-button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-button:hover {
-    background-color: #0056b3;
+
+/* 求めるスキル */
+.container_itemlist .container_item .requirement {
+    flex: 1;
+    /* margin-right: 10px; */
+    width: 85%;
 }
 
+/* スキル追加ボタン */
+.container_itemlist .container_item .add_requirement {
+    padding: 5px 10px;
+    border: none;
+    background-color: #1eac1e;
+    color: #0f110f;
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: bold;
+    margin: 5px;
+    height: 35px;
+}
+.container_itemlist .container_item .add_requirement:hover {
+    background-color: #1b941b;
+}
+
+/* スキル削除ボタン */
+.container_itemlist .container_item .remove_requirement {
+    padding: 5px 10px;
+    border: none;
+    background-color: rgb(252, 0, 0);
+    color: #0f110f;
+    cursor: pointer;
+    border-radius: 3px;
+    font-weight: bold;
+    margin: 5px;
+    height: 35px;
+}
+.container_itemlist .container_item .remove_requirement:hover {
+    background-color: #df0000;
+}
+
+/* 作成ボタン */
+.container_itemlist .create {
+    background-color: #1eac1e;
+    color: #0f110f;
+    border: none;
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+
+.container_itemlist .create:hover {
+    background-color: #1b941b;
+}
+
+/* 必須項目(印) */
 .requiredInput {
     color: red;
 }

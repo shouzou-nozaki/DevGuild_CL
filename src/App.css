@@ -6,7 +6,6 @@ header {
   color: #ffffff;
   padding: 15px;
   text-align: center;
-  
 }
 /* ************************************* */
 /*            コンテナ（共通）            */
@@ -14,7 +13,7 @@ header {
 .container {
   font-family: Arial, sans-serif;
   background-color: gray;
-  max-width: 1200px;
+  max-width: 100%;
   margin: 20px auto;
   padding: 20px;
   background: gray;
@@ -25,7 +24,7 @@ header {
 /* ************************************* */
 /*        プロジェクト一覧テーブル         */
 /* ************************************* */
-table {
+.project_table {
   width: 100%;
   border-collapse: collapse;
 }
@@ -41,7 +40,7 @@ th {
 tr:hover {
   background-color: #f1f1f1;
 }
-.button {
+.detail_button {
   display: inline-block;
   padding: 5px 10px;
   font-size: 0.9em;
@@ -52,9 +51,10 @@ tr:hover {
   text-align: center;
   transition: background-color 0.3s ease;
 }
-.button:hover {
+.detail_button:hover {
   background-color: #0056b3;
 }
+
 
 /* ************************************* */
 /*        　　　　フッター                */
@@ -68,41 +68,55 @@ tr:hover {
   border-top: 1px solid #ddd;
 }
 
-.create-project {
+/* フッターリンク(共通部) */
+.footer .create-project,
+.footer .edit-project,
+.footer .joining-project
+ {
   display: inline-block;
   margin: 10px;
   padding: 10px 15px;
   font-size: 1em;
   color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+/* プロジェクト作成 */
+.footer .create-project {
   background-color: #28a745;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+}
+.footer .create-project:hover {
+  background-color: #228d3b;
 }
 
-.edit-project {
-  display: inline-block;
-  margin: 10px;
-  padding: 10px 15px;
-  font-size: 1em;
-  color: white;
+/* プロジェクト編集 */
+.footer .edit-project {
   background-color: #007bff;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
 }
-.joined-project {
-  display: inline-block;
-  margin: 10px;
-  padding: 10px 15px;
-  font-size: 1em;
-  color: white;
-  background-color: #6c757d;
-  text-decoration: none;
-  border-radius: 5px;
-  transition: background-color 0.3s ease;
+.footer .edit-project:hover {
+  background-color: #046ad6;
 }
 
-.footer-button:hover {
-  background-color: #0056b3;
+/* 参画中プロジェクト */
+.footer .joining-project {
+  background-color: #6c757d;
+}
+.footer .joining-project:hover {
+  background-color: #3b4044;
+}
+
+
+/* ************************************* */
+/*        　　　　メッセージ               */
+/* ************************************* */
+.success-message {
+  color: green;
+  font-weight: bold;
+  margin: 10px 0;
+  background-color: #e6ffe6;
+  padding: 10px;
+  border: 1px solid green;
+  border-radius: 5px;
 }

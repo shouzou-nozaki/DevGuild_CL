@@ -1,12 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import { SearchProject } from './services/SearchProject';
 import { ProjectInfo } from './dto/ProjectInfo';
 
 function App() {
   const [projectList, setProjectList] = useState<ProjectInfo[]>([]); // プロジェクトリストの状態
-  // const [error, setError] = useState<string | null>(null); // エラー状態
+    // useLocationを使って遷移元からのstateを取得
+    const location = useLocation();
+    const navigate = useNavigate();
+    const [message, setMessage] = useState<string | null>(location.state?.message || null);
+  
 
   // プロジェクトデータを取得
   useEffect(() => {
@@ -22,7 +26,19 @@ function App() {
     };
 
     fetchProjects();
-  }, []); // 初回レンダリング時に実行
+  }, []);
+
+   // メッセージを数秒後に消す処理
+   useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage(null); // メッセージを消す
+        navigate("/", { state: null }); // URLのstateもリセット
+      }, 5000); // 5秒後に消す
+
+      return () => clearTimeout(timer); // クリーンアップ
+    }
+  }, [message, navigate]);
 
   return (
     <div className="container">
@@ -31,13 +47,13 @@ function App() {
         <h1>募集プロジェクト一覧</h1>
       </header>
 
-      {/* エラーメッセージの表示 */}
-      {/* {error && <p className="error">エラー: {error}</p>} */}
+      {/* メッセージの表示 */}
+      {message && <p className="success-message">{message}</p>}
 
       {/* プロジェクト一覧 */}
-      <table>
+      <table className='project_table'>
         {/* テーブルヘッダー */}
-        <thead>
+        <thead className='table_header'>
           <tr>
             <th>プロジェクト名</th>
             <th>募集人数</th>
@@ -50,7 +66,7 @@ function App() {
         <tbody>
           {
             projectList.map(project => (
-              <tr key={project.Id}>
+              <tr key={project.ProjectId}>
                 {/* プロジェクト名 */}
                 <td>{project.ProjectName}</td>
                 {/* 募集人数 */}
@@ -60,7 +76,7 @@ function App() {
                 {/* 詳細ボタン */}
                 <td>
                   {/* 詳細画面へ遷移 */}
-                  <Link to={`/detail`} state={{ project }} className="button">
+                  <Link to={`/detail`} state={{ project }} className="detail_button">
                     詳細を見る
                   </Link>
                 </td>
@@ -74,7 +90,7 @@ function App() {
       <footer className="footer">
         <Link to="/create" className="create-project">プロジェクト作成</Link>
         <Link to="/myprojects" className="edit-project">プロジェクト編集</Link>
-        <Link to="/joining" className="joined-project">参画中プロジェクト</Link>
+        <Link to="/joining" className="joining-project">参画中プロジェクト</Link>
       </footer>
     </div>
   );

@@ -2,10 +2,15 @@ import { isAnyArrayBuffer } from "util/types";
 import { ProjectInfo } from "../dto/ProjectInfo";
 import React, { useState, useEffect } from "react";
 import { ProjectConv } from "../util/ProjectConv";
+import { Navigate } from "react-router-dom";
 
-// プロジェクト検索DBA
+/**
+ * プロジェクト情報用サービスクラス
+ */
 export class SearchProject {
-
+    // API通信URI
+    private readonly baseUrl = "http://localhost:8080";
+    
     /**
      * プロジェクト検索処理
      * @returns 
@@ -17,7 +22,7 @@ export class SearchProject {
         try {
 
             // APIリクエスト
-            const response = await fetch("http://localhost:8080/api");
+            const response = await fetch(`${this.baseUrl}/api`);
 
             console.log("リクエスト送信完了");
 
@@ -46,20 +51,20 @@ export class SearchProject {
      */
     public async regProject(projectInfo: ProjectInfo): Promise<void> {
         try {
-            // APIリクエスト
-            const response = await fetch("http://localhost:8080/api/create", {
+            // API通信
+            const response = await fetch(`${this.baseUrl}/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    id: projectInfo.Id,
-                    name: projectInfo.ProjectName,
-                    recruiteNumber: parseInt(projectInfo.RecruiteNumber, 10),
-                    dueDate: projectInfo.DueDate,
-                    description: projectInfo.Description,
-                    // requirements: projectInfo.Requirements,
+                    projectName: projectInfo.ProjectName,                     // プロジェクト名
+                    recruiteNumber: parseInt(projectInfo.RecruiteNumber, 10), // 募集人数
+                    dueDate: projectInfo.DueDate,                             // 期限日
+                    description: projectInfo.Description,                     // 説明
+                    requirements: projectInfo.Requirements,                   // 求めるスキル
                 }),
+                mode: "cors", // CORSモードを指定
             });
 
             console.log("リクエスト送信完了");

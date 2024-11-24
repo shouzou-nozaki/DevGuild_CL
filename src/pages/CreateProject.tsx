@@ -1,20 +1,28 @@
 import { classicNameResolver } from "typescript"
 import './CreateProject.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { SearchProject } from "../services/SearchProject";
-import { ProjectInfo} from "../dto/ProjectInfo";
+import { ProjectInfo } from "../dto/ProjectInfo";
 import { useState } from "react";
 
-// プロジェクトの作成・編集画面
+/**
+ * 新規プロジェクト作成画面
+ * @returns 
+ */
 function CreateProject() {
     const [projectName, setProjectName] = useState('');       // プロジェクト名
     const [recruiteNumber, setRecruiteNumber] = useState(''); // 募集人数
     const [dueDate, setDueDate] = useState('');               // 締切日
     const [description, setDescription] = useState('');       // 説明
-    const [requirement, setRequirement] = useState('');       // 求めるスキル
-    const requirementList = new Array<string>();              // 求めるスキルリスト   
+    // スキルリストを管理する状態
+    const [requirementList, setRequirements] = useState<string[]>([""]);
 
-    // プロジェクト募集登録
+    // 遷移用フック
+    const navigate = useNavigate();
+
+    /**
+     * プロジェクト登録処理
+     */
     const CreateProject = () => {
         // 登録データ作成
         const projectInfo = new ProjectInfo();
@@ -27,56 +35,100 @@ function CreateProject() {
         // データ登録
         const dao = new SearchProject();
         dao.regProject(projectInfo);
+
+        // プロジェクト一覧へ遷移する
+        navigate("/", { state: { message: "プロジェクトを作成しました。" } });
     }
 
+
+
     /**
-     * 求めるスキルリストを作成
-     * @param event 
+     * 求めるスキル変更時処理
+     * @param index 変更対象インデックス番号
+     * @param value フォーム入力値
      */
-    const MakeRequirement = (event:any) => {
-        
-    }
+    const handleRequirementChange = (index: number, value: string) => {
+        // 対象インデックスの値を変更
+        const newRequirements = [...requirementList];
+        newRequirements[index] = value;
+        setRequirements(newRequirements);
+    };
+
+    /**
+     * スキル追加ボタン押下時処理
+     */
+    const addRequirement = () => {
+        setRequirements([...requirementList, ""]);
+    };
+
+    /**
+     * スキル削除ボタン押下時処理
+     * @param index 
+     */
+    const removeRequirement = (index: number) => {
+        // 対象インデックス以外を取得
+        const newRequirements = requirementList.filter((_, i) => i !== index);
+        setRequirements(newRequirements);
+    };
+
 
     return (
         <div className="container">
-            <h1>応募作成</h1>
-            <div >
+            <h1 className="page_title">応募作成</h1>
+            <div className="container_itemlist">
                 {/* <!-- プロジェクト名 --> */}
-                <div>
-                    <label htmlFor="projectName">プロジェクト名<span className="requiredInput">*</span></label>
-                    <input type="text" id="projectName" name="projectName" placeholder="プロジェクト名を入力してください" required 
-                        onChange={(event) => setProjectName(event.target.value)}/>
+                <div className="container_item">
+                    <label className="item_title" htmlFor="projectName">プロジェクト名<span className="requiredInput">*</span></label>
+                    {/* 入力欄 */}
+                    <input className="projectName" type="text" id="projectName" name="projectName" placeholder="プロジェクト名を入力してください" required
+                        onChange={(event) => setProjectName(event.target.value)} />
                 </div>
 
                 {/* <!-- 募集人数 --> */}
-                <div>
-                    <label htmlFor="recruiteNumber">募集人数<span className="requiredInput">*</span></label>
-                    <input type="number" id="recruiteNumber" name="recruiteNumber" placeholder="例: 5" required 
-                        onChange={(event) => setRecruiteNumber(event.target.value)}/>
+                <div className="container_item">
+                    <label className="item_title" htmlFor="recruiteNumber">募集人数<span className="requiredInput">*</span></label>
+                    {/* 入力欄 */}
+                    <input className="reqruiteNumber" type="number" id="recruiteNumber" name="recruiteNumber" placeholder="例: 5" required
+                        onChange={(event) => setRecruiteNumber(event.target.value)} />
                 </div>
 
                 {/* <!-- 締切日 --> */}
-                <div>
-                    <label htmlFor="dueDate">締切日<span className="requiredInput">*</span></label>
-                    <input type="date" id="dueDate" name="dueDate" required 
-                    onChange={(event) => setDueDate(event.target.value)}/>
+                <div className="container_item">
+                    <label className="item_title" htmlFor="dueDate">締切日<span className="requiredInput">*</span></label>
+                    {/* 入力欄 */}
+                    <input className="duedate" type="date" id="dueDate" name="dueDate" required
+                        onChange={(event) => setDueDate(event.target.value)} />
                 </div>
 
                 {/* <!-- プロジェクトの説明 --> */}
-                <div>
-                    <label htmlFor="description">プロジェクトの説明<span className="requiredInput">*</span></label>
-                    <textarea id="description" name="description" placeholder="プロジェクトの詳細を記入してください" required
-                    onChange={(event) => setDescription(event.target.value)}></textarea>
+                <div className="container_item">
+                    <label className="item_title" htmlFor="description">プロジェクトの説明<span className="requiredInput">*</span></label>
+                    {/* 入力欄 */}
+                    <textarea className="description" id="description" name="description" placeholder="プロジェクトの詳細を記入してください" required
+                        onChange={(event) => setDescription(event.target.value)}></textarea>
                 </div>
 
                 {/* <!-- 求めるスキル --> */}
-                <div>
-                    <label htmlFor="requirement">求めるスキル</label>
-                    <textarea id="requirement" name="requirement" placeholder="スキル⓵" onChange={(event) => MakeRequirement(event)}></textarea>
-                </div>
+                {requirementList.map((requirement, index) => (
+                    <div key={index} className="container_item">
+                        <label className="item_title" htmlFor={`requirement_${index}`}>求めるスキル {index + 1}</label>
+                        {/* 入力欄 */}
+                        <input className="requirement"
+                            id={`requirement_${index}`}
+                            name={`requirement_${index}`}
+                            placeholder="例: 実務でのシステム開発経験が3年以上"
+                            value={requirement}
+                            onChange={(event) => handleRequirementChange(index, event.target.value)}
+                        />
+                        {/* 追加ボタン */}
+                        <button type="button" className="add_requirement" onClick={addRequirement}>＋</button>
+                        {/* 削除ボタン */}
+                        <button type="button" className="remove_requirement" onClick={() => removeRequirement(index)}>―</button>
+                    </div>
+                ))}
 
-                {/* <!-- 提出ボタン --> */}
-                <button onClick={CreateProject}>作成する</button>
+                {/* <!-- 作成ボタン --> */}
+                <button className="create" onClick={CreateProject}>作成する</button>
             </div>
         </div>
     );
