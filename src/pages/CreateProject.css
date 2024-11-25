@@ -42,7 +42,6 @@
 /* 求めるスキル */
 .container_itemlist .container_item .requirement {
     flex: 1;
-    /* margin-right: 10px; */
     width: 85%;
 }
 
@@ -50,8 +49,8 @@
 .container_itemlist .container_item .add_requirement {
     padding: 5px 10px;
     border: none;
-    background-color: #1eac1e;
-    color: #0f110f;
+    background-color: #25d425;
+    color: white;
     cursor: pointer;
     border-radius: 3px;
     font-weight: bold;
@@ -67,7 +66,7 @@
     padding: 5px 10px;
     border: none;
     background-color: rgb(252, 0, 0);
-    color: #0f110f;
+    color: white;
     cursor: pointer;
     border-radius: 3px;
     font-weight: bold;
@@ -80,19 +79,34 @@
 
 /* 作成ボタン */
 .container_itemlist .create {
-    background-color: #1eac1e;
-    color: #0f110f;
+    background-color: #21b921;
+    color: white;
     border: none;
     cursor: pointer;
     font-weight: bold;
     width: 100%;
 }
-
 .container_itemlist .create:hover {
     background-color: #1b941b;
+}
+
+.container .back {
+    color: black;
+    background-color: gray;
+    font-weight: bold;
+    width:10%;
+    height: 30px;
+    margin-left: 90%;
 }
 
 /* 必須項目(印) */
 .requiredInput {
     color: red;
+}
+
+/* エラーメッセージ */
+.error_message {
+    color: red;
+    font-size: 0.9em;
+    /* margin-top: 5px; */
 }

@@ -21,7 +21,6 @@ function App() {
         setProjectList(response); // データを状態にセット
       } catch (err) {
         console.error("プロジェクトデータの取得に失敗:", err);
-        // setError("プロジェクトデータの取得に失敗しました");
       }
     };
 

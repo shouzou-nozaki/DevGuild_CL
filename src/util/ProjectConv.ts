@@ -24,7 +24,7 @@ export class ProjectConv{
             project.RecruiteNumber = data.recruiteNumber; // 募集人数
             project.DueDate = data.dueDate;               // 締切日
             project.Description = data.description;       // 説明
-            project.Requirements = data.requirements;      // 求めるスキル
+            project.Requirements = data.requirements;     // 求めるスキル
             
             rtn.push(project);
         });
