@@ -1,7 +1,7 @@
 import { classicNameResolver } from "typescript"
 import './CreateProject.css';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { SearchProject } from "../services/SearchProject";
+import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
 import { useState } from "react";
 import { parse } from "path/posix";
@@ -41,7 +41,7 @@ function CreateProject() {
         projectInfo.Requirements = requirementList;  // 求めるスキル
 
         // データ登録
-        const service = new SearchProject();
+        const service = new ProjectService();
         service.regProject(projectInfo);
 
         // プロジェクト一覧へ遷移する

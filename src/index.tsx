@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom/client';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-// 追加する
+
 import { BrowserRouter } from 'react-router-dom' 
-import { AppRouter } from './routes/AppRouter';
-import { SearchProject } from './services/SearchProject';
+import Login from './pages/Login';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -14,7 +13,7 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <AppRouter/>
+      <Login/>
     </BrowserRouter>
   </React.StrictMode>
 );

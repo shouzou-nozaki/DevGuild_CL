@@ -77,11 +77,11 @@
     background-color: #df0000;
 }
 
-/* 作成ボタン */
+/* プロジェクト作成ボタン */
 .container_itemlist .create {
     background-color: #21b921;
     color: white;
-    border: none;
+    /* border: none; */
     cursor: pointer;
     font-weight: bold;
     width: 100%;
@@ -90,6 +90,7 @@
     background-color: #1b941b;
 }
 
+/* 戻るボタン */
 .container .back {
     color: black;
     background-color: gray;
@@ -97,6 +98,11 @@
     width:10%;
     height: 30px;
     margin-left: 90%;
+    cursor: pointer;
+    border-radius: 3px;
+}
+.container .back:hover{
+    background-color: #5f5f5f;
 }
 
 /* 必須項目(印) */

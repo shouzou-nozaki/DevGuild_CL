@@ -7,7 +7,7 @@ import { Navigate } from "react-router-dom";
 /**
  * プロジェクト情報用サービスクラス
  */
-export class SearchProject {
+export class ProjectService {
     // API通信URI
     private readonly baseUrl = "http://localhost:8080";
     

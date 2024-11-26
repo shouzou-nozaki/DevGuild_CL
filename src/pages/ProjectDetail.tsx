@@ -1,12 +1,22 @@
 import { classicNameResolver } from "typescript"
 import './ProjectDetail.css';
-import { useLocation } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 
 // プロジェクトの詳細
 function ProjectDetail() {
     // 一覧画面からのプロジェクト情報取得
     const location = useLocation();
     const project = location.state?.project;
+
+    // 遷移用フック
+    const navigate = useNavigate();
+
+    /**
+     * プロジェクト一覧へ戻る
+     */
+    const Back = () => {
+        navigate("/");
+    }
 
     return (
         <div className="container">
@@ -35,8 +45,10 @@ function ProjectDetail() {
                         }
                     </ul>
                 </div>
-                <a href="/apply.html" className="button">参加申請</a>
+                <a href="/apply.html" className="apply">参加申請</a>
             </div>
+            {/* <!-- 戻るボタン --> */}
+            <button className="back" onClick={Back}>戻る</button>
         </div>
     );
 }

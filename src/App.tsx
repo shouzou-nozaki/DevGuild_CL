@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
-import { SearchProject } from './services/SearchProject';
+import { ProjectService } from './services/ProjectService';
 import { ProjectInfo } from './dto/ProjectInfo';
 
 function App() {
@@ -16,8 +16,8 @@ function App() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const dao = new SearchProject();
-        const response = await dao.searchProject();
+        const service = new ProjectService();
+        const response = await service.searchProject();
         setProjectList(response); // データを状態にセット
       } catch (err) {
         console.error("プロジェクトデータの取得に失敗:", err);
