@@ -2,10 +2,13 @@ import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Header.css";
 import logo from "..\\src\\assets\\logo.jpg";
+import Mode from "../util/Mode";
+import { useUser } from "../util/UserContext";
 
 const Header = () => {
     // ユーザー情報を管理（簡易的な例）
-    const [user, setUser] = useState(null); // nullなら未ログイン、オブジェクトならログイン中
+    // const [user, setUser] = useState(null); // nullなら未ログイン、オブジェクトならログイン中
+    const { user, setUser } = useUser(); // ユーザー情報とセット関数を取得
 
     const handleLogout = () => {
         setUser(null);
@@ -45,14 +48,14 @@ const Header = () => {
                 {user ? (
                     <div className="user-menu">
                         <span className="welcome-message">
-                            ようこそ、<strong>{user}</strong> さん
+                            ようこそ、<strong>{user.name}</strong> さん
                         </span>
                         <button className="logout-button" onClick={handleLogout}>
                             ログアウト
                         </button>
                     </div>
                 ) : (
-                    <Link to="/login" className="login-link">
+                    <Link to={`/login`} state={{mode : Mode.MODE_LOGIN}} className="login-link">
                         ログイン
                     </Link>
                 )}

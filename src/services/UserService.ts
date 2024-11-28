@@ -15,7 +15,7 @@ export class UserService {
      * プロジェクト検索処理
      * @returns レスポンスコード
      */
-    public async searchUser(username:string, password:string) : Promise<string> {
+    public async userLogin(username:string, email:string, password:string) : Promise<string> {
         // 戻り値
         let responseCd = "";
         try {
@@ -28,6 +28,7 @@ export class UserService {
                 },
                 body: JSON.stringify({
                     username, // ユーザー名
+                    email,    // メールアドレス
                     password, // パスワード
                 }),
                 mode: "cors", // CORSモードを指定

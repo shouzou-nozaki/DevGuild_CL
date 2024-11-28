@@ -2,7 +2,7 @@ import { REFUSED } from "dns";
 
 const Messages = {
     REQUIRED_USERNAME       : "ユーザー名を入力してください。",
-    REQIRED_ADDRESS         : "メールアドレスを入力してください。",
+    REQIRED_EMAIL           : "メールアドレスを入力してください。",
     REQUIRED_PASSWORD       : "パスワードを入力してください。",
     CREATE_SUCCESS          : "プロジェクトを作成しました。",
     REQUIRED_PROJECT_NAME   : "プロジェクト名は必須項目です。",
