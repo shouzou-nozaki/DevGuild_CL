@@ -19,6 +19,7 @@ export class UserService {
         // 戻り値
         let responseCd = "";
         try {
+            // return "200";
             // API通信
             const response = await fetch(`${this.baseUrl}/create`, {
                 method: "POST",

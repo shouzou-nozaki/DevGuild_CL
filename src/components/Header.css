@@ -1,0 +1,119 @@
+/* ヘッダー全体 */
+.header {
+    /* background-color: #007bff; */
+    color: white;
+    padding: 0.5rem 1rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+}
+
+/* ヘッダーのコンテナ */
+.header-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 左右にスペースを分配 */
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* ロゴ */
+.header .logo a {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: white;
+    text-decoration: none;
+}
+
+/* ナビゲーションメニュー */
+.header .nav {
+    display: flex;
+    justify-content: flex-end; /* 右寄せ */
+    flex-grow: 1;
+}
+
+.header .nav-list {
+    display: flex;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header .nav-item {
+    margin-left: 1rem;
+}
+
+.header .nav-item a {
+    color: white;
+    text-decoration: none;
+    font-size: 1rem;
+    transition: color 0.3s;
+}
+
+/* フッターリンク(共通部) */
+.header .login-button,
+.header .login-link,
+.header .nav-item .project-list,
+.header .nav-item .create-project,
+.header .nav-item .edit-project,
+.header .nav-item .joining-project {
+  display: inline-block;
+  margin: 5px;
+  padding: 10px 15px;
+  font-size: 1em;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+  font-weight: bold;
+}
+
+/* プロジェクト一覧 */
+.header .nav-item .project-list {
+    background-color: #e21d03;
+}
+.header .nav-item .project-list:hover {
+    background-color: #ad1400;
+}
+
+/* プロジェクト作成 */
+.header .nav-item .create-project {
+  background-color: #28a745;
+}
+.header .nav-item .create-project:hover {
+  background-color: #228d3b;
+}
+
+/* プロジェクト編集 */
+.header .nav-item .edit-project {
+  background-color: #007bff;
+}
+.header .nav-item .edit-project:hover {
+  background-color: #046ad6;
+}
+
+/* 参画中プロジェクト */
+.header .nav-item .joining-project {
+  background-color: #ffa703;
+}
+.header .nav-item .joining-project:hover {
+  background-color: #ce8702;
+}
+
+/* ログイン・ログアウト */
+.header .logout-button,
+.header .login-link {
+    font-weight: bold;
+    background-color: #333333;
+    color:white;
+    margin-right: 5%;
+}
+.header .nav-item .logout-button:hover {
+    background-color: rgb(39, 39, 39);
+    color: white;
+}

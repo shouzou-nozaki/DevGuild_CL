@@ -3,6 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import { ProjectService } from './services/ProjectService';
 import { ProjectInfo } from './dto/ProjectInfo';
+import Header from './components/Header';
 
 function App() {
   const [projectList, setProjectList] = useState<ProjectInfo[]>([]); // プロジェクトリストの状態

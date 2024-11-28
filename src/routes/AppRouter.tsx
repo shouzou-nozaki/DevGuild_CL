@@ -6,10 +6,14 @@ import ProjectDetail from '../pages/ProjectDetail';
 import MyProjects from "../pages/MyProjects";
 import CreateProject from "../pages/CreateProject";
 import JoiningProjects from "../pages/JoiningProjects";
+import Login from "../pages/Login";
+import Header from "../components/Header";
 
 export const AppRouter = () => {
     return (
         <Routes>
+            {/* ログイン画面 */}
+            <Route path="/login" element={<Login/>}/>
             {/* プロジェクト一覧 */}
             <Route path="/" element={<App />} />
             {/* プロジェクト詳細 */}

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import App from '../App';  // 認証後に表示されるメインのAppコンポーネント
-import { Router } from 'react-router-dom';
+import { Router, useNavigate } from 'react-router-dom';
 import { AppRouter } from '../routes/AppRouter';
 
 import './Login.css';
@@ -14,6 +14,9 @@ const Login = () => {
   const [password, setPassword] = useState("");   // パスワードの状態
   const [errorMessage, setErrorMessage] = useState<Errors>({}); // エラーメッセージの状態
 
+  // 遷移用フック
+  const navigate = useNavigate();
+
   /**
    * ログインボタン押下処理
    * @returns 
@@ -24,11 +27,10 @@ const Login = () => {
     if (!username) errors.UserNameError = Messages.REQUIRED_USERNAME;
     if (!address ) errors.AddressError  = Messages.REQIRED_ADDRESS;
     if (!password) errors.PasswordError = Messages.REQUIRED_PASSWORD;
-
     setErrorMessage(errors);
 
     // エラーメッセージが１件でもあれば処理を抜ける
-    if(Object.keys(errors).length !== 0) return;
+    if(errors.UserNameError || errors.AddressError || errors.PasswordError) return;
 
     // ユーザー登録確認
     const service = new UserService();
@@ -37,12 +39,8 @@ const Login = () => {
     // 失敗時は処理を抜ける
     if(await responseCd != "200") return;
     
-    // サーバーへのログイン処理（APIリクエストなどをここに記述）
-    console.log("ログイン情報:", { username, password });
-
-    // 仮の成功処理
-    setErrorMessage(errors);
-    alert("ログインに成功しました！");
+    // プロジェクト一覧へ移動
+    navigate("/");
   };
 
   return (
@@ -64,16 +62,16 @@ const Login = () => {
           />
         </div>
 
-        {/* ユーザー名 */}
+        {/* メールアドレス */}
         <div className="form-group">
           <label htmlFor="username">メールアドレス</label>
           {/* エラーメッセージ */}
           {errorMessage.AddressError && <div className="error_message">{errorMessage.AddressError}</div>}
           <input
             type="text"
-            id="username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
+            id="address"
+            value={address}
+            onChange={(e) => setAddress(e.target.value)}
             placeholder="ユーザー名を入力"
           />
         </div>

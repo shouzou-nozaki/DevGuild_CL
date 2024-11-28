@@ -4,8 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
-import { BrowserRouter } from 'react-router-dom' 
+import { BrowserRouter, Router } from 'react-router-dom' 
 import Login from './pages/Login';
+import { AppRouter } from './routes/AppRouter';
+import Header from './components/Header';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -13,7 +15,8 @@ const root = ReactDOM.createRoot(
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <Login/>
+      <Header/>
+      <AppRouter/>
     </BrowserRouter>
   </React.StrictMode>
 );
