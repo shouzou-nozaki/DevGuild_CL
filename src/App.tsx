@@ -86,12 +86,6 @@ function App() {
         </tbody>
       </table>
 
-      {/* フッター */}
-      <footer className="footer">
-        <Link to="/create" className="create-project">プロジェクト作成</Link>
-        <Link to="/myprojects" className="edit-project">プロジェクト編集</Link>
-        <Link to="/joining" className="joining-project">参画中プロジェクト</Link>
-      </footer>
     </div>
   );
 }

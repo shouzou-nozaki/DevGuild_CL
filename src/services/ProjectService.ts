@@ -22,7 +22,7 @@ export class ProjectService {
         try {
 
             // APIリクエスト
-            const response = await fetch(`${this.baseUrl}/api`);
+            const response = await fetch(`${this.baseUrl}/project/search`);
 
             console.log("リクエスト送信完了");
 
@@ -52,7 +52,7 @@ export class ProjectService {
     public async regProject(projectInfo: ProjectInfo): Promise<void> {
         try {
             // API通信
-            const response = await fetch(`${this.baseUrl}/create`, {
+            const response = await fetch(`${this.baseUrl}/project/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

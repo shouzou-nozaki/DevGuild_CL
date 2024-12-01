@@ -9,6 +9,7 @@ import Messages from '../util/Message';
 import { UserService } from '../services/UserService';
 import Mode from '../util/Mode';
 import { useUser } from '../util/UserContext';
+import { UserConv } from '../util/UserConv';
 
 const Login = () => {
   const { setUser } = useUser();
@@ -48,14 +49,23 @@ const Login = () => {
     // エラーメッセージが１件でもあれば処理を抜ける
     if (errors.UserNameError || errors.AddressError || errors.PasswordError) return;
 
-    // ログイン処理実行
-    const service = new UserService();
-    const userInfo = service.userLogin(username, email, password);
+    try {
+      // ログイン処理実行
+      const service = new UserService();
+      const responseData = await service.userLogin(username, email, password);
 
-    // プロジェクト一覧へ移動
-    setUser({ name: username, email });
-    navigate("/");
+      // ここでユーザーの値を入れる
+      const util = new UserConv();
+      const userInfo = util.ToUserInfo(responseData);
 
+      if (!userInfo.UserId || !userInfo.Name) return;
+
+      // プロジェクト一覧へ移動
+      setUser({ id: userInfo.UserId, name: userInfo.Name });
+      navigate("/");
+    } catch (error) {
+      console.error("ログイン中にエラー:", error);
+    }
   };
 
   return (

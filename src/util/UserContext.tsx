@@ -2,8 +2,9 @@ import React, { createContext, useContext, useState, ReactNode } from "react";
 
 // ユーザー情報の型定義
 interface User {
+    id:string;
     name: string;
-    email: string;
+    // email: string;
 }
 
 // Contextの型定義
