@@ -50,6 +50,9 @@ const Login = () => {
     if (errors.UserNameError || errors.AddressError || errors.PasswordError) return;
 
     try {
+      // ログイン表示モードの場合は、ユーザー名入力をクリアする
+      if (mode === Mode.MODE_LOGIN) setUsername("");
+
       // ログイン処理実行
       const service = new UserService();
       const responseData = await service.userLogin(username, email, password);
@@ -125,9 +128,16 @@ const Login = () => {
         {/* リンク */}
         <div className="login-links">
           <a href="#">パスワードを忘れた方はこちら</a>
-          <Link to={`/login`} state={{ mode: Mode.MODE_CREATE }} className="login-link">
-            新規登録
-          </Link>
+          {mode == Mode.MODE_CREATE ? (
+            <Link to={`/login`} state={{ mode: Mode.MODE_LOGIN }} className="login-link">
+              ログイン
+            </Link>
+          ) : (
+            <Link to={`/login`} state={{ mode: Mode.MODE_CREATE }} className="login-link">
+              新規登録
+            </Link>
+          )}
+
         </div>
       </div>
     </div>
