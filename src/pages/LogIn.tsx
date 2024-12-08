@@ -63,8 +63,15 @@ const Login = () => {
 
       if (!userInfo.UserId || !userInfo.Name) return;
 
+      // ログイン情報をキャッシュに保存
+      const userCache = {
+        id: userInfo.UserId,
+        name: userInfo.Name,
+      }
+      localStorage.setItem("userInfo", JSON.stringify(userCache));
+
       // プロジェクト一覧へ移動
-      setUser({ id: userInfo.UserId, name: userInfo.Name });
+      setUser(userCache);
       navigate("/");
     } catch (error) {
       console.error("ログイン中にエラー:", error);

@@ -6,12 +6,13 @@ import { ProjectInfo } from './dto/ProjectInfo';
 import Header from './components/Header';
 
 function App() {
-  const [projectList, setProjectList] = useState<ProjectInfo[]>([]); // プロジェクトリストの状態
-    // useLocationを使って遷移元からのstateを取得
-    const location = useLocation();
-    const navigate = useNavigate();
-    const [message, setMessage] = useState<string | null>(location.state?.message || null);
-  
+  const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
+
+  const navigate = useNavigate();
+
+  // 遷移元からメッセージ取得
+  const location = useLocation();
+  const [message, setMessage] = useState<string | null>(location.state?.message || null);
 
   // プロジェクトデータを取得
   useEffect(() => {
@@ -28,8 +29,8 @@ function App() {
     fetchProjects();
   }, []);
 
-   // メッセージを数秒後に消す処理
-   useEffect(() => {
+  // メッセージを数秒後に消す処理
+  useEffect(() => {
     if (message) {
       const timer = setTimeout(() => {
         setMessage(null); // メッセージを消す

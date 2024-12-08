@@ -1,0 +1,28 @@
+.project-list-container {
+    margin-top: 80px;
+    padding: 20px;
+}
+
+.project-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.project-table th,
+.project-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+.edit-button {
+    color: white;
+    background-color: #007bff;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.edit-button:hover {
+    background-color: #0056b3;
+}
