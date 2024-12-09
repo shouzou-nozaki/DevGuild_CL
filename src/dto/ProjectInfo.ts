@@ -1,6 +1,6 @@
 // プロジェクトオブジェクト
 export class ProjectInfo{
-    UserID: String = "";                               // ユーザーID
+    UserId: String = "";                               // ユーザーID
     ProjectId : string = "";                           // プロジェクトID
     ProjectName : string = "";                         // プロジェクト名
     RecruiteNumber : string = "";                      // 募集人数

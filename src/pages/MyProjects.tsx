@@ -16,30 +16,30 @@ interface Project {
 
 const MyProjects: React.FC = () => {
     const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
-    const { user, setUser } = useUser(); // ユーザー情報とセット関数を取得
+    const { user } = useUser(); // ユーザー情報とセット関数を取得
 
-  // プロジェクトデータを取得
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        // 検索情報を設定
-        const searchCond = new SearchCondition();
-        searchCond.UserId = user?.id ?? ""; // ユーザーID
+    // 検索情報を設定
+    const searchCond = new SearchCondition();
+    searchCond.UserId = user?.id.toString() ?? ""; // ユーザーID
 
-        // API通信を行い、プロジェクトを取得
-        const service = new ProjectService();
-        const response = await service.getMyProjects(searchCond);
+    // プロジェクトデータを取得
+    useEffect(() => {
+        const fetchProjects = async () => {
+            try {
+                // API通信を行い、プロジェクトを取得
+                const service = new ProjectService();
+                const response = await service.getMyProjects(searchCond);
 
-        // 取得したプロジェクトをセット
-        setProjectList(response);
+                // 取得したプロジェクトをセット
+                setProjectList(response);
 
-      } catch (err) {
-        console.error("プロジェクトデータの取得に失敗:", err);
-      }
-    };
+            } catch (err) {
+                console.error("プロジェクトデータの取得に失敗:", err);
+            }
+        };
 
-    fetchProjects();
-  }, []);
+        fetchProjects();
+    }, []);
 
     return (
         <div className="project-list-container">

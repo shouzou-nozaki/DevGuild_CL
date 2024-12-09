@@ -7,6 +7,7 @@ import { useState } from "react";
 import { parse } from "path/posix";
 import Messages from "../util/Message";
 import { Errors } from "../dto/Errors";
+import { useUser } from "../util/UserContext";
 
 /**
  * 新規プロジェクト作成画面
@@ -18,6 +19,7 @@ function CreateProject() {
     const [dueDate, setDueDate] = useState('');                          // 締切日
     const [description, setDescription] = useState('');                  // 説明
     const [requirementList, setRequirements] = useState<string[]>([""]); // 求めるスキル
+    const { user } = useUser(); // ユーザー情報とセット関数を取得
 
     // エラーメッセージ
     const [errors, setErrors] = useState<Errors>({});
@@ -34,6 +36,7 @@ function CreateProject() {
 
         // 登録データ作成
         const projectInfo = new ProjectInfo();
+        projectInfo.UserId = user?.id.toString() ?? "";         // ユーザーID
         projectInfo.ProjectName = projectName;       // プロジェクト名
         projectInfo.RecruiteNumber = recruiteNumber; // 募集人数
         projectInfo.DueDate = dueDate;               // 締切日

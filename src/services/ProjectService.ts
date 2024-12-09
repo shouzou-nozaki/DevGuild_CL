@@ -57,6 +57,7 @@ export class ProjectService {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
+                    userId: projectInfo.UserId,                               // ユーザーID
                     projectName: projectInfo.ProjectName,                     // プロジェクト名
                     recruiteNumber: parseInt(projectInfo.RecruiteNumber, 10), // 募集人数
                     dueDate: projectInfo.DueDate,                             // 期限日
