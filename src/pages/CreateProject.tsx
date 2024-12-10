@@ -8,6 +8,7 @@ import { parse } from "path/posix";
 import Messages from "../util/Message";
 import { Errors } from "../dto/Errors";
 import { useUser } from "../util/UserContext";
+import Mode from "../util/Mode";
 
 /**
  * 新規プロジェクト作成画面
@@ -27,18 +28,27 @@ function CreateProject() {
     // 遷移用フック
     const navigate = useNavigate();
 
-    // プロジェクト編集画面からの
+    // 遷移元からのパラメータ状態取得
     const location = useLocation();
-    const projectInfo:ProjectInfo = location.state?.projectInfo;
+    const projectInfo: ProjectInfo = location.state?.projectInfo; // プロジェクト情報
+    const mode = location.state?.mode;                            // 表示モード
 
-    useEffect(() =>{
-        let param = new URLSearchParams(document.location.search);
-        if(projectInfo){
+    useEffect(() => {
+        // let param = new URLSearchParams(document.location.search);
+        // if (param) mode = "";
+
+        if (projectInfo) {
             setProjectName(projectInfo.ProjectName);
             setRecruiteNumber(projectInfo.RecruiteNumber);
             setDueDate(projectInfo.DueDate);
             setDescription(projectInfo.Description);
             setRequirements(projectInfo.Requirements);
+        }else{
+            setProjectName("");
+            setRecruiteNumber("");
+            setDueDate("");
+            setDescription("");
+            setRequirements([]);
         }
     })
 
@@ -100,18 +110,18 @@ function CreateProject() {
      * @returns 
      */
     const validateForm = () => {
-        const errors:Errors = {};
+        const errors: Errors = {};
 
         // プロジェクト名チェック
         if (!projectName.trim()) errors.ProjectNameError = Messages.REQUIRED_PROJECT_NAME;
 
         // 募集人数チェック
         if (!recruiteNumber.trim()) errors.RecruiteNumberError = Messages.REQUIRED_RECRUITE_NUMBER;
-        if(parseInt(recruiteNumber) <= 0) errors.RecruiteNumberError = Messages.NOTVALID_RECRUITE_NUMBER;
+        if (parseInt(recruiteNumber) <= 0) errors.RecruiteNumberError = Messages.NOTVALID_RECRUITE_NUMBER;
 
         // 期限日チェック
         if (!dueDate) errors.DuedateError = Messages.REQUIRED_DUE_DATE;
-        if(new Date(dueDate) < new Date()) errors.DuedateError = Messages.NOTVALID_DUE_DATE;
+        if (new Date(dueDate) < new Date()) errors.DuedateError = Messages.NOTVALID_DUE_DATE;
 
         // 説明チェック
         if (!description.trim()) errors.descriptionError = Messages.REQUIRED_DESCRIPTION
@@ -123,13 +133,17 @@ function CreateProject() {
     /**
      * プロジェクト一覧へ戻る
      */
-    const Back = () =>{
+    const Back = () => {
         navigate("/");
     }
 
     return (
         <div className="container">
-            <h1 className="page_title">応募作成</h1>
+            {/* ページタイトル */}
+            {mode == Mode.MODE_UPDATEPROJECT ?
+                <h1 className="page_title">{Mode.MODE_UPDATEPROJECT}</h1> :
+                <h1 className="page_title">{Mode.MODE_NEWPROJECT}</h1>
+            }
             <div className="container_itemlist">
                 {/* <!-- プロジェクト名 --> */}
                 <div className="container_item">
@@ -138,8 +152,8 @@ function CreateProject() {
                     {errors.ProjectNameError && <div className="error_message">{errors.ProjectNameError}</div>}
                     {/* 入力欄 */}
                     <input className="projectName" type="text" id="projectName" name="projectName" placeholder="プロジェクト名を入力してください" required
-                        onChange={(event) => setProjectName(event.target.value)} 
-                        value={projectName}/>
+                        onChange={(event) => setProjectName(event.target.value)}
+                        value={projectName} />
                 </div>
 
                 {/* <!-- 募集人数 --> */}
@@ -149,8 +163,8 @@ function CreateProject() {
                     {errors.RecruiteNumberError && <div className="error_message">{errors.RecruiteNumberError}</div>}
                     {/* 入力欄 */}
                     <input className="reqruiteNumber" type="number" id="recruiteNumber" name="recruiteNumber" placeholder="例: 5" required
-                        onChange={(event) => setRecruiteNumber(event.target.value)} 
-                        value={recruiteNumber}/>
+                        onChange={(event) => setRecruiteNumber(event.target.value)}
+                        value={recruiteNumber} />
                 </div>
 
                 {/* <!-- 締切日 --> */}
@@ -160,8 +174,8 @@ function CreateProject() {
                     {errors.DuedateError && <div className="error_message">{errors.DuedateError}</div>}
                     {/* 入力欄 */}
                     <input className="duedate" type="date" id="dueDate" name="dueDate" required
-                        onChange={(event) => setDueDate(event.target.value)} 
-                        value={dueDate}/>
+                        onChange={(event) => setDueDate(event.target.value)}
+                        value={dueDate} />
                 </div>
 
                 {/* <!-- プロジェクトの説明 --> */}
@@ -194,10 +208,13 @@ function CreateProject() {
                     </div>
                 ))}
 
-                {/* <!-- 作成ボタン --> */}
-                <button className="create" onClick={CreateProject}>作成する</button>
-                {/* <!-- 作成ボタン --> */}
-                <button className="update" onClick={CreateProject}>更新する</button>
+
+                {/* <!-- 作成/更新ボタン --> */}
+                {mode == Mode.MODE_UPDATEPROJECT ? 
+                    <button className="update" onClick={CreateProject}>更新する</button> :
+                    <button className="create" onClick={CreateProject}>作成する</button>
+                }
+
             </div>
             {/* <!-- 戻るボタン --> */}
             <button className="back" onClick={Back}>戻る</button>

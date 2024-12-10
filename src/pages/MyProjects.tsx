@@ -6,13 +6,7 @@ import { useUser } from "../util/UserContext";
 import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
 import { SearchCondition } from "../dto/SearchCondition";
-
-interface Project {
-    id: string;
-    name: string;
-    description: string;
-    dueDate: string;
-}
+import Mode from "../util/Mode";
 
 const MyProjects: React.FC = () => {
     const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
@@ -60,7 +54,7 @@ const MyProjects: React.FC = () => {
                             <td>{project.Description}</td>
                             <td>{project.DueDate}</td>
                             <td>
-                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project }} className="edit-button">
+                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project , mode:Mode.MODE_UPDATEPROJECT}} className="edit-button">
                                     編集
                                 </Link>
                             </td>
