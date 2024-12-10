@@ -60,7 +60,7 @@ const MyProjects: React.FC = () => {
                             <td>{project.Description}</td>
                             <td>{project.DueDate}</td>
                             <td>
-                                <Link to={`/edit-project/${project.ProjectId}`} className="edit-button">
+                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project }} className="edit-button">
                                     編集
                                 </Link>
                             </td>

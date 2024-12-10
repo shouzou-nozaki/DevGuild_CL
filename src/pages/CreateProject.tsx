@@ -1,9 +1,9 @@
 import { classicNameResolver } from "typescript"
 import './CreateProject.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { parse } from "path/posix";
 import Messages from "../util/Message";
 import { Errors } from "../dto/Errors";
@@ -27,6 +27,21 @@ function CreateProject() {
     // 遷移用フック
     const navigate = useNavigate();
 
+    // プロジェクト編集画面からの
+    const location = useLocation();
+    const projectInfo:ProjectInfo = location.state?.projectInfo;
+
+    useEffect(() =>{
+        let param = new URLSearchParams(document.location.search);
+        if(projectInfo){
+            setProjectName(projectInfo.ProjectName);
+            setRecruiteNumber(projectInfo.RecruiteNumber);
+            setDueDate(projectInfo.DueDate);
+            setDescription(projectInfo.Description);
+            setRequirements(projectInfo.Requirements);
+        }
+    })
+
     /**
      * プロジェクト登録処理
      */
@@ -36,12 +51,12 @@ function CreateProject() {
 
         // 登録データ作成
         const projectInfo = new ProjectInfo();
-        projectInfo.UserId = user?.id.toString() ?? "";         // ユーザーID
-        projectInfo.ProjectName = projectName;       // プロジェクト名
-        projectInfo.RecruiteNumber = recruiteNumber; // 募集人数
-        projectInfo.DueDate = dueDate;               // 締切日
-        projectInfo.Description = description;       // 説明
-        projectInfo.Requirements = requirementList;  // 求めるスキル
+        projectInfo.UserId = user?.id.toString() ?? ""; // ユーザーID
+        projectInfo.ProjectName = projectName;          // プロジェクト名
+        projectInfo.RecruiteNumber = recruiteNumber;    // 募集人数
+        projectInfo.DueDate = dueDate;                  // 締切日
+        projectInfo.Description = description;          // 説明
+        projectInfo.Requirements = requirementList;     // 求めるスキル
 
         // データ登録
         const service = new ProjectService();
@@ -112,7 +127,6 @@ function CreateProject() {
         navigate("/");
     }
 
-
     return (
         <div className="container">
             <h1 className="page_title">応募作成</h1>
@@ -124,17 +138,19 @@ function CreateProject() {
                     {errors.ProjectNameError && <div className="error_message">{errors.ProjectNameError}</div>}
                     {/* 入力欄 */}
                     <input className="projectName" type="text" id="projectName" name="projectName" placeholder="プロジェクト名を入力してください" required
-                        onChange={(event) => setProjectName(event.target.value)} />
+                        onChange={(event) => setProjectName(event.target.value)} 
+                        value={projectName}/>
                 </div>
 
                 {/* <!-- 募集人数 --> */}
                 <div className="container_item">
-                    <label className="item_title" htmlFor="recruiteNumber">募集人数<span className="requiredInput">*</span></label>
+                    <label className="item_title" htmlFor="recruiteNumber" >募集人数<span className="requiredInput">*</span></label>
                     {/* エラーメッセージ */}
                     {errors.RecruiteNumberError && <div className="error_message">{errors.RecruiteNumberError}</div>}
                     {/* 入力欄 */}
                     <input className="reqruiteNumber" type="number" id="recruiteNumber" name="recruiteNumber" placeholder="例: 5" required
-                        onChange={(event) => setRecruiteNumber(event.target.value)} />
+                        onChange={(event) => setRecruiteNumber(event.target.value)} 
+                        value={recruiteNumber}/>
                 </div>
 
                 {/* <!-- 締切日 --> */}
@@ -144,7 +160,8 @@ function CreateProject() {
                     {errors.DuedateError && <div className="error_message">{errors.DuedateError}</div>}
                     {/* 入力欄 */}
                     <input className="duedate" type="date" id="dueDate" name="dueDate" required
-                        onChange={(event) => setDueDate(event.target.value)} />
+                        onChange={(event) => setDueDate(event.target.value)} 
+                        value={dueDate}/>
                 </div>
 
                 {/* <!-- プロジェクトの説明 --> */}
@@ -154,7 +171,8 @@ function CreateProject() {
                     {errors.descriptionError && <div className="error_message">{errors.descriptionError}</div>}
                     {/* 入力欄 */}
                     <textarea className="description" id="description" name="description" placeholder="プロジェクトの詳細を記入してください" required
-                        onChange={(event) => setDescription(event.target.value)}></textarea>
+                        onChange={(event) => setDescription(event.target.value)}
+                        value={description}></textarea>
                 </div>
 
                 {/* <!-- 求めるスキル --> */}
@@ -178,6 +196,8 @@ function CreateProject() {
 
                 {/* <!-- 作成ボタン --> */}
                 <button className="create" onClick={CreateProject}>作成する</button>
+                {/* <!-- 作成ボタン --> */}
+                <button className="update" onClick={CreateProject}>更新する</button>
             </div>
             {/* <!-- 戻るボタン --> */}
             <button className="back" onClick={Back}>戻る</button>
