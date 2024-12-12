@@ -4,6 +4,17 @@ import React, { useState, useEffect } from "react";
 import { ProjectConv } from "../util/ProjectConv";
 import { Navigate } from "react-router-dom";
 import { SearchCondition } from "../dto/SearchCondition";
+import { promises } from "dns";
+import { throws } from "assert";
+
+export const Crud = {
+    CREATE   : 0,
+    REFARENCE: 1,
+    UPDATE   : 2,
+    DELETE   : 3,
+} as const;
+
+type Crud = (typeof Crud)[keyof typeof Crud];
 
 /**
  * プロジェクト情報用サービスクラス
@@ -11,6 +22,40 @@ import { SearchCondition } from "../dto/SearchCondition";
 export class ProjectService {
     // API通信URI
     private readonly baseUrl = "http://localhost:8080";
+    
+    /**
+     * 共通SV通信処理
+     * @param param サーバー連携情報
+     */
+    private async transactionWithSV(param:any, crud:Crud){
+        // APIエンドポイントURL
+        let url = "";
+        let base = "http://localhost:8080";
+
+        switch(crud) {
+            case Crud.CREATE:
+                url = `${base}/project/create`;
+                break;
+            case Crud.REFARENCE:
+                url = `${base}/project/search`;
+                break;
+            case Crud.UPDATE:
+                url = `${base}/project/update`;
+                break;
+            case Crud.DELETE:
+                url = `${base}/project/delete`;
+                break;
+            default:
+                
+        }
+        // API通信
+        const response = await fetch(url, {
+            method: "POST",
+            headers: {"Content-Type": "application/json",},
+            body: JSON.stringify({param:param}),
+            mode: "cors", // CORSモードを指定
+        });
+    }
 
     /**
      * プロジェクト検索処理
@@ -78,6 +123,30 @@ export class ProjectService {
             console.log("プロジェクトが正常に登録されました");
 
         } catch (error) {
+            console.error("プロジェクトの登録に失敗しました:", error);
+        }
+    }
+
+    /**
+     * プロジェクト情報更新
+     * @param projectInfo プロジェクト情報
+     */
+    public async updateProject(projectInfo:ProjectInfo):Promise<void> {
+        try{
+            this.transactionWithSV(projectInfo, Crud.UPDATE);
+        }catch(error){
+            console.error("プロジェクトの登録に失敗しました:", error);
+        }
+    }
+    
+    /**
+     * プロジェクト情報登録
+     * @param projectInfo プロジェクト情報
+     */
+    public async deleteProject(projectId: string): Promise<void> {
+        try{
+            this.transactionWithSV(projectId, Crud.DELETE);
+        }catch(error){
             console.error("プロジェクトの登録に失敗しました:", error);
         }
     }

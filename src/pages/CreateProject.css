@@ -25,7 +25,8 @@
 .container_itemlist .container_item .description,
 .container_itemlist .container_item .requirement,
 .container_itemlist .create,
-.container_itemlist .update 
+.container_itemlist .update,
+.container_itemlist .delete
  {
     width: 90%;
     padding: 10px;
@@ -102,7 +103,20 @@
     width: 100%;
 }
 .container_itemlist .update:hover {
-    background-color: #e07800;
+    background-color: #d17000;
+}
+
+/* プロジェクト更新ボタン */
+.container_itemlist .delete {
+    background-color: #ff0000;
+    color: white;
+    /* border: none; */
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+.container_itemlist .delete:hover {
+    background-color: #d80000;
 }
 
 /* 戻るボタン */

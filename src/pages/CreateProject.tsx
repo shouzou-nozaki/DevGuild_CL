@@ -43,7 +43,7 @@ function CreateProject() {
             setDueDate(projectInfo.DueDate);
             setDescription(projectInfo.Description);
             setRequirements(projectInfo.Requirements);
-        }else{
+        } else {
             setProjectName("");
             setRecruiteNumber("");
             setDueDate("");
@@ -55,7 +55,7 @@ function CreateProject() {
     /**
      * プロジェクト登録処理
      */
-    const CreateProject = () => {
+    const createProject = () => {
         // 入力値チェック
         if (!validateForm()) return;
 
@@ -75,6 +75,31 @@ function CreateProject() {
         // プロジェクト一覧へ遷移する
         navigate("/", { state: { message: Messages.CREATE_SUCCESS } });
     }
+
+    /**
+     * プロジェクト更新処理
+     */
+    const updateProject = () => {
+        // データ更新
+        const service = new ProjectService();
+        service.updateProject(projectInfo);
+    }
+
+    /**
+     * プロジェクト削除処理
+     */
+    const deleteProject = () => {
+
+        let param = new URLSearchParams(document.location.search);
+        let projectId = param.get("projectId") ?? "";
+
+        if (projectId === "") return;
+
+        // データ削除
+        const service = new ProjectService();
+        service.deleteProject(projectId);
+    }
+
 
     /**
      * 求めるスキル変更時処理
@@ -210,9 +235,13 @@ function CreateProject() {
 
 
                 {/* <!-- 作成/更新ボタン --> */}
-                {mode == Mode.MODE_UPDATEPROJECT ? 
-                    <button className="update" onClick={CreateProject}>更新する</button> :
-                    <button className="create" onClick={CreateProject}>作成する</button>
+                {mode == Mode.MODE_UPDATEPROJECT ?
+                    <div>
+                        <button className="update" onClick={updateProject}>更新する</button>
+                        <button className="delete" onClick={deleteProject}>削除する</button>
+                    </div>
+                    :
+                    <button className="create" onClick={createProject}>作成する</button>
                 }
 
             </div>
