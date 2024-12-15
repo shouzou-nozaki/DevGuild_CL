@@ -15,12 +15,16 @@ import Mode from "../util/Mode";
  * @returns 
  */
 function CreateProject() {
+    const [projectId, setProjectId] = useState('');                      // プロジェクトID
     const [projectName, setProjectName] = useState('');                  // プロジェクト名
     const [recruiteNumber, setRecruiteNumber] = useState('');            // 募集人数
     const [dueDate, setDueDate] = useState('');                          // 締切日
     const [description, setDescription] = useState('');                  // 説明
     const [requirementList, setRequirements] = useState<string[]>([""]); // 求めるスキル
     const { user } = useUser(); // ユーザー情報とセット関数を取得
+
+    // プロジェクト情報
+    let projectInfo = new ProjectInfo();
 
     // エラーメッセージ
     const [errors, setErrors] = useState<Errors>({});
@@ -30,27 +34,25 @@ function CreateProject() {
 
     // 遷移元からのパラメータ状態取得
     const location = useLocation();
-    const projectInfo: ProjectInfo = location.state?.projectInfo; // プロジェクト情報
-    const mode = location.state?.mode;                            // 表示モード
+    const projectInfoFromEdit: ProjectInfo = location.state?.projectInfo; // 編集画面からのプロジェクト情報
+    const mode = location.state?.mode ?? Mode.MODE_NEWPROJECT;            // 表示モード
 
     useEffect(() => {
-        // let param = new URLSearchParams(document.location.search);
-        // if (param) mode = "";
-
-        if (projectInfo) {
-            setProjectName(projectInfo.ProjectName);
-            setRecruiteNumber(projectInfo.RecruiteNumber);
-            setDueDate(projectInfo.DueDate);
-            setDescription(projectInfo.Description);
-            setRequirements(projectInfo.Requirements);
+        if (mode == Mode.MODE_UPDATEPROJECT) {
+            setProjectId(projectInfoFromEdit.ProjectId);
+            setProjectName(projectInfoFromEdit.ProjectName);
+            setRecruiteNumber(projectInfoFromEdit.RecruiteNumber);
+            setDueDate(projectInfoFromEdit.DueDate);
+            setDescription(projectInfoFromEdit.Description);
+            setRequirements(projectInfoFromEdit.Requirements);
         } else {
             setProjectName("");
             setRecruiteNumber("");
             setDueDate("");
             setDescription("");
-            setRequirements([]);
+            setRequirements([""]);
         }
-    })
+    }, [])
 
     /**
      * プロジェクト登録処理
@@ -58,15 +60,8 @@ function CreateProject() {
     const createProject = () => {
         // 入力値チェック
         if (!validateForm()) return;
-
-        // 登録データ作成
-        const projectInfo = new ProjectInfo();
-        projectInfo.UserId = user?.id.toString() ?? ""; // ユーザーID
-        projectInfo.ProjectName = projectName;          // プロジェクト名
-        projectInfo.RecruiteNumber = recruiteNumber;    // 募集人数
-        projectInfo.DueDate = dueDate;                  // 締切日
-        projectInfo.Description = description;          // 説明
-        projectInfo.Requirements = requirementList;     // 求めるスキル
+        // 入力値をセット
+        setFormValue();
 
         // データ登録
         const service = new ProjectService();
@@ -80,16 +75,23 @@ function CreateProject() {
      * プロジェクト更新処理
      */
     const updateProject = () => {
+        // 入力値チェック
+        if (!validateForm()) return;
+        // 入力値をセット
+        setFormValue();
+
         // データ更新
         const service = new ProjectService();
         service.updateProject(projectInfo);
+        
+        // プロジェクト一覧へ遷移する
+        navigate("/", { state: { message: Messages.CREATE_SUCCESS } });
     }
 
     /**
      * プロジェクト削除処理
      */
     const deleteProject = () => {
-
         let param = new URLSearchParams(document.location.search);
         let projectId = param.get("projectId") ?? "";
 
@@ -99,7 +101,6 @@ function CreateProject() {
         const service = new ProjectService();
         service.deleteProject(projectId);
     }
-
 
     /**
      * 求めるスキル変更時処理
@@ -154,6 +155,19 @@ function CreateProject() {
         setErrors(errors); // エラーメッセージを状態として保存
         return Object.keys(errors).length === 0; // エラーがなければtrueを返す
     };
+
+    /**
+ * フォーム値セット処理
+ */
+    const setFormValue = () => {
+        projectInfo.UserId = user?.id.toString() ?? ""; // ユーザーID
+        projectInfo.ProjectId = projectId;              // プロジェクトID
+        projectInfo.ProjectName = projectName;          // プロジェクト名
+        projectInfo.RecruiteNumber = recruiteNumber;    // 募集人数
+        projectInfo.DueDate = dueDate;                  // 締切日
+        projectInfo.Description = description;          // 説明
+        projectInfo.Requirements = requirementList;     // 求めるスキル
+    }
 
     /**
      * プロジェクト一覧へ戻る

@@ -7,8 +7,8 @@ interface Project {
 }
 
 export class ProjectInfo implements Project{
-    UserId: String = "";                               // ユーザーID
     ProjectId : string = "";                           // プロジェクトID
+    UserId: String = "";                               // ユーザーID
     ProjectName : string = "";                         // プロジェクト名
     RecruiteNumber : string = "";                      // 募集人数
     DueDate : string  = "";                            // 締切日

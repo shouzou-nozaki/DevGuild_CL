@@ -19,7 +19,7 @@ function App() {
     const fetchProjects = async () => {
       try {
         const service = new ProjectService();
-        const response = await service.searchProject();
+        const response = await service.getAllProject();
         setProjectList(response); // データを状態にセット
       } catch (err) {
         console.error("プロジェクトデータの取得に失敗:", err);
