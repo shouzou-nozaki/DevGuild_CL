@@ -122,3 +122,33 @@ tr:hover {
   border-radius: 5px;
   text-align: center;
 }
+
+
+/* ************************************* */
+/*        　ページネーション              */
+/* ************************************* */
+.pagination {
+  display: flex;
+  justify-content: left;
+  margin-top: 20px;
+}
+
+.page_button {
+  background-color: #f0f0f0;
+  border: 1px solid #ccc;
+  margin: 0 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.page_button:hover {
+  background-color: #007bff;
+  color: #fff;
+}
+
+.page_button.active {
+  background-color: #007bff;
+  color: #fff;
+  border: 1px solid #0056b3;
+}
