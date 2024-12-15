@@ -85,21 +85,19 @@ function CreateProject() {
         service.updateProject(projectInfo);
         
         // プロジェクト一覧へ遷移する
-        navigate("/", { state: { message: Messages.CREATE_SUCCESS } });
+        navigate("/", { state: { message: Messages.UPDATE_SUCCESS } });
     }
 
     /**
      * プロジェクト削除処理
      */
     const deleteProject = () => {
-        let param = new URLSearchParams(document.location.search);
-        let projectId = param.get("projectId") ?? "";
-
-        if (projectId === "") return;
-
         // データ削除
         const service = new ProjectService();
         service.deleteProject(projectId);
+
+        // プロジェクト一覧へ遷移する
+        navigate("/", { state: { message: Messages.DELETE_SUCCESS } });
     }
 
     /**
