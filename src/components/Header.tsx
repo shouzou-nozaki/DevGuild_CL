@@ -1,18 +1,21 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import logo from "..\\src\\assets\\logo.jpg";
 import Mode from "../util/Mode";
 import { useUser } from "../util/UserContext";
 
 const Header = () => {
-    // ユーザー情報を管理（簡易的な例）
-    // const [user, setUser] = useState(null); // nullなら未ログイン、オブジェクトならログイン中
     const { user, setUser } = useUser(); // ユーザー情報とセット関数を取得
 
+    // 遷移用フック
+    const navigate = useNavigate();
+
     const handleLogout = () => {
+        // Contextとキャッシュをクリア
         setUser(null);
-        alert("ログアウトしました");
+        localStorage.removeItem("userInfo");
+        navigate("/login");
     };
 
     return (
@@ -20,7 +23,7 @@ const Header = () => {
             {/* ロゴ */}
             <div className="logo">
                 {/* <img src={logo} alt="logo" className="logo-image"></img> */}
-                <Link to="/" >MyProjectApp</Link>
+                <Link to="/" >Dev.Guild</Link>
             </div>
 
             {/* ナビゲーションメニュー */}
@@ -55,7 +58,7 @@ const Header = () => {
                         </button>
                     </div>
                 ) : (
-                    <Link to={`/login`} state={{mode : Mode.MODE_LOGIN}} className="login-link">
+                    <Link to={`/login`} state={{ mode: Mode.MODE_LOGIN }} className="login-link">
                         ログイン
                     </Link>
                 )}

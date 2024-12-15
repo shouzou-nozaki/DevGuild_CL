@@ -1,23 +1,30 @@
 import { classicNameResolver } from "typescript"
 import './CreateProject.css';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { parse } from "path/posix";
 import Messages from "../util/Message";
 import { Errors } from "../dto/Errors";
+import { useUser } from "../util/UserContext";
+import Mode from "../util/Mode";
 
 /**
  * 新規プロジェクト作成画面
  * @returns 
  */
 function CreateProject() {
+    const [projectId, setProjectId] = useState('');                      // プロジェクトID
     const [projectName, setProjectName] = useState('');                  // プロジェクト名
     const [recruiteNumber, setRecruiteNumber] = useState('');            // 募集人数
     const [dueDate, setDueDate] = useState('');                          // 締切日
     const [description, setDescription] = useState('');                  // 説明
     const [requirementList, setRequirements] = useState<string[]>([""]); // 求めるスキル
+    const { user } = useUser(); // ユーザー情報とセット関数を取得
+
+    // プロジェクト情報
+    let projectInfo = new ProjectInfo();
 
     // エラーメッセージ
     const [errors, setErrors] = useState<Errors>({});
@@ -25,20 +32,36 @@ function CreateProject() {
     // 遷移用フック
     const navigate = useNavigate();
 
+    // 遷移元からのパラメータ状態取得
+    const location = useLocation();
+    const projectInfoFromEdit: ProjectInfo = location.state?.projectInfo; // 編集画面からのプロジェクト情報
+    const mode = location.state?.mode ?? Mode.MODE_NEWPROJECT;            // 表示モード
+
+    useEffect(() => {
+        if (mode == Mode.MODE_UPDATEPROJECT) {
+            setProjectId(projectInfoFromEdit.ProjectId);
+            setProjectName(projectInfoFromEdit.ProjectName);
+            setRecruiteNumber(projectInfoFromEdit.RecruiteNumber);
+            setDueDate(projectInfoFromEdit.DueDate);
+            setDescription(projectInfoFromEdit.Description);
+            setRequirements(projectInfoFromEdit.Requirements);
+        } else {
+            setProjectName("");
+            setRecruiteNumber("");
+            setDueDate("");
+            setDescription("");
+            setRequirements([""]);
+        }
+    }, [])
+
     /**
      * プロジェクト登録処理
      */
-    const CreateProject = () => {
+    const createProject = () => {
         // 入力値チェック
         if (!validateForm()) return;
-
-        // 登録データ作成
-        const projectInfo = new ProjectInfo();
-        projectInfo.ProjectName = projectName;       // プロジェクト名
-        projectInfo.RecruiteNumber = recruiteNumber; // 募集人数
-        projectInfo.DueDate = dueDate;               // 締切日
-        projectInfo.Description = description;       // 説明
-        projectInfo.Requirements = requirementList;  // 求めるスキル
+        // 入力値をセット
+        setFormValue();
 
         // データ登録
         const service = new ProjectService();
@@ -46,6 +69,35 @@ function CreateProject() {
 
         // プロジェクト一覧へ遷移する
         navigate("/", { state: { message: Messages.CREATE_SUCCESS } });
+    }
+
+    /**
+     * プロジェクト更新処理
+     */
+    const updateProject = () => {
+        // 入力値チェック
+        if (!validateForm()) return;
+        // 入力値をセット
+        setFormValue();
+
+        // データ更新
+        const service = new ProjectService();
+        service.updateProject(projectInfo);
+        
+        // プロジェクト一覧へ遷移する
+        navigate("/", { state: { message: Messages.UPDATE_SUCCESS } });
+    }
+
+    /**
+     * プロジェクト削除処理
+     */
+    const deleteProject = () => {
+        // データ削除
+        const service = new ProjectService();
+        service.deleteProject(projectId);
+
+        // プロジェクト一覧へ遷移する
+        navigate("/", { state: { message: Messages.DELETE_SUCCESS } });
     }
 
     /**
@@ -82,18 +134,18 @@ function CreateProject() {
      * @returns 
      */
     const validateForm = () => {
-        const errors:Errors = {};
+        const errors: Errors = {};
 
         // プロジェクト名チェック
         if (!projectName.trim()) errors.ProjectNameError = Messages.REQUIRED_PROJECT_NAME;
 
         // 募集人数チェック
         if (!recruiteNumber.trim()) errors.RecruiteNumberError = Messages.REQUIRED_RECRUITE_NUMBER;
-        if(parseInt(recruiteNumber) <= 0) errors.RecruiteNumberError = Messages.NOTVALID_RECRUITE_NUMBER;
+        if (parseInt(recruiteNumber) <= 0) errors.RecruiteNumberError = Messages.NOTVALID_RECRUITE_NUMBER;
 
         // 期限日チェック
         if (!dueDate) errors.DuedateError = Messages.REQUIRED_DUE_DATE;
-        if(new Date(dueDate) < new Date()) errors.DuedateError = Messages.NOTVALID_DUE_DATE;
+        if (new Date(dueDate) < new Date()) errors.DuedateError = Messages.NOTVALID_DUE_DATE;
 
         // 説明チェック
         if (!description.trim()) errors.descriptionError = Messages.REQUIRED_DESCRIPTION
@@ -103,16 +155,32 @@ function CreateProject() {
     };
 
     /**
+ * フォーム値セット処理
+ */
+    const setFormValue = () => {
+        projectInfo.UserId = user?.id.toString() ?? ""; // ユーザーID
+        projectInfo.ProjectId = projectId;              // プロジェクトID
+        projectInfo.ProjectName = projectName;          // プロジェクト名
+        projectInfo.RecruiteNumber = recruiteNumber;    // 募集人数
+        projectInfo.DueDate = dueDate;                  // 締切日
+        projectInfo.Description = description;          // 説明
+        projectInfo.Requirements = requirementList;     // 求めるスキル
+    }
+
+    /**
      * プロジェクト一覧へ戻る
      */
-    const Back = () =>{
+    const Back = () => {
         navigate("/");
     }
 
-
     return (
         <div className="container">
-            <h1 className="page_title">応募作成</h1>
+            {/* ページタイトル */}
+            {mode == Mode.MODE_UPDATEPROJECT ?
+                <h1 className="page_title">{Mode.MODE_UPDATEPROJECT}</h1> :
+                <h1 className="page_title">{Mode.MODE_NEWPROJECT}</h1>
+            }
             <div className="container_itemlist">
                 {/* <!-- プロジェクト名 --> */}
                 <div className="container_item">
@@ -121,17 +189,19 @@ function CreateProject() {
                     {errors.ProjectNameError && <div className="error_message">{errors.ProjectNameError}</div>}
                     {/* 入力欄 */}
                     <input className="projectName" type="text" id="projectName" name="projectName" placeholder="プロジェクト名を入力してください" required
-                        onChange={(event) => setProjectName(event.target.value)} />
+                        onChange={(event) => setProjectName(event.target.value)}
+                        value={projectName} />
                 </div>
 
                 {/* <!-- 募集人数 --> */}
                 <div className="container_item">
-                    <label className="item_title" htmlFor="recruiteNumber">募集人数<span className="requiredInput">*</span></label>
+                    <label className="item_title" htmlFor="recruiteNumber" >募集人数<span className="requiredInput">*</span></label>
                     {/* エラーメッセージ */}
                     {errors.RecruiteNumberError && <div className="error_message">{errors.RecruiteNumberError}</div>}
                     {/* 入力欄 */}
                     <input className="reqruiteNumber" type="number" id="recruiteNumber" name="recruiteNumber" placeholder="例: 5" required
-                        onChange={(event) => setRecruiteNumber(event.target.value)} />
+                        onChange={(event) => setRecruiteNumber(event.target.value)}
+                        value={recruiteNumber} />
                 </div>
 
                 {/* <!-- 締切日 --> */}
@@ -141,7 +211,8 @@ function CreateProject() {
                     {errors.DuedateError && <div className="error_message">{errors.DuedateError}</div>}
                     {/* 入力欄 */}
                     <input className="duedate" type="date" id="dueDate" name="dueDate" required
-                        onChange={(event) => setDueDate(event.target.value)} />
+                        onChange={(event) => setDueDate(event.target.value)}
+                        value={dueDate} />
                 </div>
 
                 {/* <!-- プロジェクトの説明 --> */}
@@ -151,7 +222,8 @@ function CreateProject() {
                     {errors.descriptionError && <div className="error_message">{errors.descriptionError}</div>}
                     {/* 入力欄 */}
                     <textarea className="description" id="description" name="description" placeholder="プロジェクトの詳細を記入してください" required
-                        onChange={(event) => setDescription(event.target.value)}></textarea>
+                        onChange={(event) => setDescription(event.target.value)}
+                        value={description}></textarea>
                 </div>
 
                 {/* <!-- 求めるスキル --> */}
@@ -173,8 +245,17 @@ function CreateProject() {
                     </div>
                 ))}
 
-                {/* <!-- 作成ボタン --> */}
-                <button className="create" onClick={CreateProject}>作成する</button>
+
+                {/* <!-- 作成/更新ボタン --> */}
+                {mode == Mode.MODE_UPDATEPROJECT ?
+                    <div>
+                        <button className="update" onClick={updateProject}>更新する</button>
+                        <button className="delete" onClick={deleteProject}>削除する</button>
+                    </div>
+                    :
+                    <button className="create" onClick={createProject}>作成する</button>
+                }
+
             </div>
             {/* <!-- 戻るボタン --> */}
             <button className="back" onClick={Back}>戻る</button>

@@ -1,7 +1,14 @@
 // プロジェクトオブジェクト
-export class ProjectInfo{
-    UserID: String = "";                               // ユーザーID
+interface Project {
+    ProjectName:string,
+    RecruiteNumber : string,
+    DueDate : string,
+    Description : string,
+}
+
+export class ProjectInfo implements Project{
     ProjectId : string = "";                           // プロジェクトID
+    UserId: String = "";                               // ユーザーID
     ProjectName : string = "";                         // プロジェクト名
     RecruiteNumber : string = "";                      // 募集人数
     DueDate : string  = "";                            // 締切日

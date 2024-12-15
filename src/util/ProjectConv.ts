@@ -7,7 +7,7 @@ export class ProjectConv{
      * @param responseData 
      * @returns 
      */
-    public ToProjectInfo(responseData:any):Array<ProjectInfo>{
+    public static ToProjectInfo(responseData:any):Array<ProjectInfo>{
         const rtn = new Array<ProjectInfo>();
         // プロジェクト情報に変換
         responseData.forEach((data: { 

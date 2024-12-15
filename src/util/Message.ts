@@ -5,6 +5,8 @@ const Messages = {
     REQIRED_EMAIL           : "メールアドレスを入力してください。",
     REQUIRED_PASSWORD       : "パスワードを入力してください。",
     CREATE_SUCCESS          : "プロジェクトを作成しました。",
+    UPDATE_SUCCESS          : "プロジェクトを更新しました。",
+    DELETE_SUCCESS          : "プロジェクトを削除しました。",
     REQUIRED_PROJECT_NAME   : "プロジェクト名は必須項目です。",
     REQUIRED_RECRUITE_NUMBER: "締切日は必須項目です。",
     REQUIRED_DUE_DATE       : "締切日は必須項目です。",

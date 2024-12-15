@@ -24,7 +24,10 @@
 .container_itemlist .container_item .duedate,
 .container_itemlist .container_item .description,
 .container_itemlist .container_item .requirement,
-.container_itemlist .create {
+.container_itemlist .create,
+.container_itemlist .update,
+.container_itemlist .delete
+ {
     width: 90%;
     padding: 10px;
     margin-bottom: 20px;
@@ -88,6 +91,32 @@
 }
 .container_itemlist .create:hover {
     background-color: #1b941b;
+}
+
+/* プロジェクト更新ボタン */
+.container_itemlist .update {
+    background-color: #ff8800;
+    color: white;
+    /* border: none; */
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+.container_itemlist .update:hover {
+    background-color: #d17000;
+}
+
+/* プロジェクト更新ボタン */
+.container_itemlist .delete {
+    background-color: #ff0000;
+    color: white;
+    /* border: none; */
+    cursor: pointer;
+    font-weight: bold;
+    width: 100%;
+}
+.container_itemlist .delete:hover {
+    background-color: #d80000;
 }
 
 /* 戻るボタン */
