@@ -1,62 +1,65 @@
-/**
- * サーバー通信時のリクエストパラメータ
- */
-export interface ServerRequest {
-    param: any; // サーバーに送信するリクエストデータ
-    perform: Perform; // サーバーエンドポイントのパス
-}
+// export interface Perform {
+//     Search(arg0: null, Search: any): unknown;
+// };
 
-/**
- * Performタイプ: エンドポイント指定の基本型
- */
+// // サーバー通信処理の共通基盤クラス
+// export class HttpClient {
+//     static readonly baseURL = "http://localhost:8080"; // エンドポイントのベースURL
+
+//     public static async callApi(param: any, perform: Perform): Promise<Response> {
+//         const url = `${this.baseURL}${perform}`; // エンドポイントURLの生成
+//         const response = await fetch(url, {
+//             method: "POST",
+//             headers: { "Content-Type": "application/json" },
+//             body: JSON.stringify(param), // パラメータを送信
+//             mode: "cors",
+//         });
+
+//         if (!response.ok) {
+//             throw new Error(`API Error: ${response.status} ${response.statusText}`);
+//         }
+
+//         return response; // レスポンスを返却
+//     }
+// }
+
+
+// Perform 型の改善
 export type Perform = string;
 
-/**
- * サーバー通信基盤クラス: 各リクエストオブジェクトの型定義
- */
-export class Http implements ServerRequest {
-    param: any;
-    perform: Perform;
-
-    constructor(param: any, perform: Perform) {
-        this.param = param;
-        this.perform = perform;
-    }
-}
-
-/**
- * API通信クライアント: 抽象化されたサーバー通信基盤クラス
- */
-export abstract class HttpClient {
-    private baseURL: string;
+// サーバー通信処理の共通基盤クラス
+export class HttpClient {
+    private baseURL: string; // インスタンスごとに異なるURLを設定可能
 
     constructor(baseURL: string = "http://localhost:8080") {
         this.baseURL = baseURL;
     }
 
     /**
-     * サーバー通信の準備を各サブクラスで定義
+     * API コール処理
+     * @param param API に渡すパラメータ
+     * @param perform エンドポイント (Perform型)
+     * @returns APIからのレスポンス
      */
-    public abstract prepareRequest(): Http;
-
-    /**
-     * サーバー通信処理
-     */
-    public async callApi(): Promise<Response> {
-        // 具体的なリクエストデータを取得
-        const { param, perform } = this.prepareRequest();
-
-        // APIエンドポイントのURL作成
+    public async callApi(param: any, perform: Perform): Promise<Response> {
         const url = `${this.baseURL}${perform}`;
+        try {
+            const response = await fetch(url, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({param: param}),
+                mode: "cors",
+            });
 
-        // fetchを利用した通信処理
-        const response = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ param }), // パラメータを送信
-            mode: "cors", // CORSモードを有効化
-        });
+            if (!response.ok) {
+                // カスタマイズされたエラーハンドリング
+                throw new Error(`API Error: ${response.status} ${response.statusText}`);
+            }
 
-        return response;
+            return response;
+        } catch (error) {
+            console.error(`HTTP通信エラー: ${error}`);
+            throw error; // 必要に応じてエラーを再スロー
+        }
     }
 }

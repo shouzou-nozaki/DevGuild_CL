@@ -18,7 +18,7 @@ export class UserService {
      * ユーザーログイン処理
      * @returns レスポンスコード
      */
-    public async userLogin(username:string, email:string, password:string) : Promise<any> {
+    public async login(userInfo:UserInfo) : Promise<any> {
         try {
             // API通信
             const response = await fetch(`${this.baseUrl}/user/login`, {
@@ -27,9 +27,7 @@ export class UserService {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                    UserName : username, // ユーザー名
-                    Email : email,       // メールアドレス
-                    Password : password, // パスワード
+                    param: userInfo
                 }),
                 mode: "cors", // CORSモードを指定
             });
