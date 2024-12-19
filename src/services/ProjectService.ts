@@ -1,11 +1,5 @@
-import { isAnyArrayBuffer } from "util/types";
 import { ProjectInfo } from "../dto/ProjectInfo";
-import React, { useState, useEffect } from "react";
 import { ProjectConv } from "../util/ProjectConv";
-import { Navigate } from "react-router-dom";
-import { SearchCondition } from "../dto/SearchCondition";
-import { promises } from "dns";
-import { throws } from "assert";
 
 // APIエンドポイントEnum
 export const Perform = {
@@ -15,7 +9,6 @@ export const Perform = {
     DELETE   : "/project/delete",
     MYPROJECT: "/project/myproject",
 } as const;
-
 type Perform = (typeof Perform)[keyof typeof Perform];
 
 /**
@@ -87,7 +80,7 @@ export class ProjectService {
      * @param searchCond 検索条件
      * @returns プロジェクト情報
      */
-    public async getMyProjects(searchCond: SearchCondition): Promise<Array<ProjectInfo>> {
+    public async getMyProjects(searchCond: any): Promise<Array<ProjectInfo>> {
         // 戻り値
         let rtn = new Array<ProjectInfo>;
         try {

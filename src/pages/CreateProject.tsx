@@ -1,18 +1,15 @@
-import { classicNameResolver } from "typescript"
 import './CreateProject.css';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
 import { useEffect, useState } from "react";
-import { parse } from "path/posix";
 import Messages from "../util/Message";
 import { Errors } from "../dto/Errors";
 import { useUser } from "../util/UserContext";
 import Mode from "../util/Mode";
 
 /**
- * 新規プロジェクト作成画面
- * @returns 
+ * プロジェクト作成/変更画面
  */
 function CreateProject() {
     const [projectId, setProjectId] = useState('');                      // プロジェクトID
@@ -21,31 +18,29 @@ function CreateProject() {
     const [dueDate, setDueDate] = useState('');                          // 締切日
     const [description, setDescription] = useState('');                  // 説明
     const [requirementList, setRequirements] = useState<string[]>([""]); // 求めるスキル
-    const { user } = useUser(); // ユーザー情報とセット関数を取得
-
+    const { user } = useUser(); // ユーザー情報
+    const [errors, setErrors] = useState<Errors>({}); // エラーメッセージ
+    
     // プロジェクト情報
     let projectInfo = new ProjectInfo();
-
-    // エラーメッセージ
-    const [errors, setErrors] = useState<Errors>({});
-
     // 遷移用フック
     const navigate = useNavigate();
-
     // 遷移元からのパラメータ状態取得
     const location = useLocation();
     const projectInfoFromEdit: ProjectInfo = location.state?.projectInfo; // 編集画面からのプロジェクト情報
     const mode = location.state?.mode ?? Mode.MODE_NEWPROJECT;            // 表示モード
 
+    // フォーム値設定
     useEffect(() => {
         if (mode == Mode.MODE_UPDATEPROJECT) {
-            setProjectId(projectInfoFromEdit.ProjectId);
-            setProjectName(projectInfoFromEdit.ProjectName);
-            setRecruiteNumber(projectInfoFromEdit.RecruiteNumber);
-            setDueDate(projectInfoFromEdit.DueDate);
-            setDescription(projectInfoFromEdit.Description);
-            setRequirements(projectInfoFromEdit.Requirements);
+            setProjectId(projectInfoFromEdit.ProjectId);           // プロジェクトID
+            setProjectName(projectInfoFromEdit.ProjectName);       // プロジェクト名
+            setRecruiteNumber(projectInfoFromEdit.RecruiteNumber); // 募集人数
+            setDueDate(projectInfoFromEdit.DueDate);               // 期限日
+            setDescription(projectInfoFromEdit.Description);       // 説明
+            setRequirements(projectInfoFromEdit.Requirements);     // 要求事項
         } else {
+            setProjectId("");
             setProjectName("");
             setRecruiteNumber("");
             setDueDate("");

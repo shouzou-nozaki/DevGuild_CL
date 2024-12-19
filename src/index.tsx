@@ -5,7 +5,6 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { BrowserRouter, Router } from 'react-router-dom'
-import Login from './pages/Login';
 import { AppRouter } from './routes/AppRouter';
 import Header from './components/Header';
 import { UserProvider } from './util/UserContext';

@@ -5,27 +5,29 @@ import { ProjectService } from './services/ProjectService';
 import { ProjectInfo } from './dto/ProjectInfo';
 import Header from './components/Header';
 
+
+/**
+ * プロジェクト一覧画面
+ */
 function App() {
   const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
   const [currentPage, setCurrentPage] = useState(1); // 現在のページ
+  
   const itemsPerPage = 10; // 1ページあたりの表示件数
-
+  // 遷移用フック
   const navigate = useNavigate();
-
   // 遷移元からメッセージ取得
   const location = useLocation();
   const [message, setMessage] = useState<string | null>(location.state?.message || null);
-
   // ページごとのデータを抽出
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentProjects = projectList.slice(indexOfFirstItem, indexOfLastItem);
-
   // ページ数の計算
   const totalPages = Math.ceil(projectList.length / itemsPerPage);
-
   // ページ切り替え処理
   const paginate = (pageNumber: React.SetStateAction<number>) => setCurrentPage(pageNumber);
+
 
   // プロジェクトデータを取得
   useEffect(() => {
@@ -38,7 +40,6 @@ function App() {
         console.error("プロジェクトデータの取得に失敗:", err);
       }
     };
-
     fetchProjects();
   }, []);
 
@@ -100,6 +101,7 @@ function App() {
         </tbody>
       </table>
 
+      {/* ページネーション */}
       <nav className="pagination">
         <button
           onClick={() => paginate(currentPage - 1)}
