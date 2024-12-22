@@ -1,39 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import "./MyProjects.css";
-import { userInfo } from "os";
 import { useUser } from "../util/UserContext";
 import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
-import { SearchCondition } from "../dto/SearchCondition";
-import Mode from "../util/Mode";
+import { Const } from "../util/Const";
 
 const MyProjects: React.FC = () => {
     const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
     const { user } = useUser(); // ユーザー情報とセット関数を取得
 
-    // 検索情報を設定
-    const searchCond = new SearchCondition();
-    searchCond.UserId = user?.id.toString() ?? ""; // ユーザーID
-
-    // プロジェクトデータを取得
+    // 初期処理
     useEffect(() => {
-        const fetchProjects = async () => {
-            try {
-                // API通信を行い、プロジェクトを取得
-                const service = new ProjectService();
-                const response = await service.getMyProjects(searchCond);
-
-                // 取得したプロジェクトをセット
-                setProjectList(response);
-
-            } catch (err) {
-                console.error("プロジェクトデータの取得に失敗:", err);
-            }
-        };
-
         fetchProjects();
     }, []);
+
+    const fetchProjects = async () => {
+        try {
+            const service = new ProjectService();
+            const response = await service.getMyProjects(user?.id ?? "");
+            setProjectList(response); // データを状態にセット
+          } catch (err) {
+            console.error("プロジェクトデータの取得に失敗:", err);
+          }
+    }
 
     return (
         <div className="project-list-container">
@@ -54,7 +44,7 @@ const MyProjects: React.FC = () => {
                             <td>{project.Description}</td>
                             <td>{project.DueDate}</td>
                             <td>
-                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project , mode:Mode.MODE_UPDATEPROJECT}} className="edit-button">
+                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project, mode: Const.MODE_UPDATEPROJECT }} className="edit-button">
                                     編集
                                 </Link>
                             </td>

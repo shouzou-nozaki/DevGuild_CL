@@ -3,45 +3,35 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import { ProjectService } from './services/ProjectService';
 import { ProjectInfo } from './dto/ProjectInfo';
-import Header from './components/Header';
 
+/**
+ * プロジェクト一覧画面
+ */
 function App() {
   const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
   const [currentPage, setCurrentPage] = useState(1); // 現在のページ
+  
   const itemsPerPage = 10; // 1ページあたりの表示件数
-
+  // 遷移用フック
   const navigate = useNavigate();
-
   // 遷移元からメッセージ取得
   const location = useLocation();
   const [message, setMessage] = useState<string | null>(location.state?.message || null);
-
   // ページごとのデータを抽出
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const currentProjects = projectList.slice(indexOfFirstItem, indexOfLastItem);
-
   // ページ数の計算
   const totalPages = Math.ceil(projectList.length / itemsPerPage);
-
   // ページ切り替え処理
   const paginate = (pageNumber: React.SetStateAction<number>) => setCurrentPage(pageNumber);
 
+
   // プロジェクトデータを取得
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const service = new ProjectService();
-        const response = await service.getAllProject();
-        setProjectList(response); // データを状態にセット
-      } catch (err) {
-        console.error("プロジェクトデータの取得に失敗:", err);
-      }
-    };
-
     fetchProjects();
   }, []);
-
+  
   // メッセージを数秒後に消す処理
   useEffect(() => {
     if (message) {
@@ -53,6 +43,16 @@ function App() {
       return () => clearTimeout(timer); // クリーンアップ
     }
   }, [message, navigate]);
+
+  const fetchProjects = async () => {
+    try {
+      const service = new ProjectService();
+      const response = await service.getAllProject();
+      setProjectList(response); // データを状態にセット
+    } catch (err) {
+      console.error("プロジェクトデータの取得に失敗:", err);
+    }
+  };
 
   return (
     <div className="container">
@@ -100,6 +100,7 @@ function App() {
         </tbody>
       </table>
 
+      {/* ページネーション */}
       <nav className="pagination">
         <button
           onClick={() => paginate(currentPage - 1)}

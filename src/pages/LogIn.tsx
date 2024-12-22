@@ -5,17 +5,17 @@ import { AppRouter } from '../routes/AppRouter';
 
 import './Login.css';
 import { Errors } from '../dto/Errors';
-import Messages from '../util/Message';
 import { UserService } from '../services/UserService';
-import Mode from '../util/Mode';
 import { useUser } from '../util/UserContext';
-import { UserConv } from '../util/UserConv';
+import { UserInfo } from '../dto/UserInfo';
+import { ResponseConv } from '../util/ResponseConv';
+import { Const } from '../util/Const';
 
 const Login = () => {
   const { setUser } = useUser();
 
   const [username, setUsername] = useState("");   // ユーザー名の状態
-  const [email, setEmail] = useState("");   // メールアドレスの状態
+  const [email, setEmail] = useState("");         // メールアドレスの状態
   const [password, setPassword] = useState("");   // パスワードの状態
   const [errorMessage, setErrorMessage] = useState<Errors>({}); // エラーメッセージの状態
 
@@ -33,50 +33,69 @@ const Login = () => {
   // 遷移用フック
   const navigate = useNavigate();
 
+  const formValueValid = (): boolean => {
+    // 入力値を見てエラーメッセージをセット
+    const errors = new Errors();
+    if (mode == Const.MODE_USERCREATE && !username) errors.UserNameError = Const.VALIDATION_USERNAME;
+    if (!email) errors.EmailError = Const.VALIDATION_EMAIL;
+    if (!password) errors.PasswordError = Const.VALIDATION_PASSWORD;
+    setErrorMessage(errors);
+
+    // エラーメッセージが１件でもあれば処理を抜ける
+    if (errors.UserNameError || errors.EmailError || errors.PasswordError) return false;
+
+    return true;
+  }
+
+  const makeLoginUserInfo = (): UserInfo => {
+    const loginUser = new UserInfo();
+    loginUser.Name = username;
+    loginUser.Email = email;
+    loginUser.Password = password;
+
+    return loginUser;
+  }
+
   /**
    * ログインボタン押下処理
    * @returns 
    */
   const handleLogin = async () => {
-
-    // 入力値を見てエラーメッセージをセット
-    const errors = new Errors();
-    if (mode == Mode.MODE_CREATE && !username) errors.UserNameError = Messages.REQUIRED_USERNAME;
-    if (!email) errors.AddressError = Messages.REQIRED_EMAIL;
-    if (!password) errors.PasswordError = Messages.REQUIRED_PASSWORD;
-    setErrorMessage(errors);
-
-    // エラーメッセージが１件でもあれば処理を抜ける
-    if (errors.UserNameError || errors.AddressError || errors.PasswordError) return;
-
     try {
+      if (!formValueValid()) return;
+
       // ログイン表示モードの場合は、ユーザー名入力をクリアする
-      if (mode === Mode.MODE_LOGIN) setUsername("");
+      if (mode === Const.MODE_USERLOGIN) setUsername("");
 
       // ログイン処理実行
       const service = new UserService();
-      const responseData = await service.userLogin(username, email, password);
+      const responseData = await service.login(makeLoginUserInfo());
 
       // ここでユーザーの値を入れる
-      const util = new UserConv();
-      const userInfo = util.ToUserInfo(responseData);
+      const userInfo = await ResponseConv.ToUserInfo(responseData);
 
-      if (!userInfo.UserId || !userInfo.Name) return;
+      CacheUserInfo(userInfo);
 
-      // ログイン情報をキャッシュに保存
-      const userCache = {
-        id: userInfo.UserId,
-        name: userInfo.Name,
-      }
-      localStorage.setItem("userInfo", JSON.stringify(userCache));
-
-      // プロジェクト一覧へ移動
-      setUser(userCache);
+      // プロジェクト一覧へ遷移
       navigate("/");
+
     } catch (error) {
       console.error("ログイン中にエラー:", error);
     }
   };
+
+  // ユーザー情報をキャッシュに保存
+  const CacheUserInfo = (userInfo: UserInfo) => {
+    if(!userInfo.UserId || !userInfo.Name) return;  // ユーザー情報が取得できない場合は処理を抜ける
+
+    // ログイン情報をキャッシュに保存
+    const userCache = {
+      id: userInfo.UserId,
+      name: userInfo.Name,
+    }
+    localStorage.setItem("userInfo", JSON.stringify(userCache));
+    setUser(userCache);
+  }
 
   return (
     <div className="login-container">
@@ -84,7 +103,7 @@ const Login = () => {
         <h1 className="login-title">{mode}</h1>
 
         {/* ユーザー名 */}
-        {mode == Mode.MODE_CREATE && (
+        {mode == Const.MODE_USERLOGIN && (
           <div className="form-group">
             <label htmlFor="username">ユーザー名</label>
             {/* エラーメッセージ */}
@@ -103,7 +122,7 @@ const Login = () => {
         <div className="form-group">
           <label htmlFor="username">メールアドレス</label>
           {/* エラーメッセージ */}
-          {errorMessage.AddressError && <div className="error_message">{errorMessage.AddressError}</div>}
+          {errorMessage.EmailError && <div className="error_message">{errorMessage.EmailError}</div>}
           <input
             type="text"
             id="address"
@@ -132,15 +151,14 @@ const Login = () => {
           ログイン
         </button>
 
-        {/* リンク */}
         <div className="login-links">
           <a href="#">パスワードを忘れた方はこちら</a>
-          {mode == Mode.MODE_CREATE ? (
-            <Link to={`/login`} state={{ mode: Mode.MODE_LOGIN }} className="login-link">
+          {mode == Const.MODE_USERCREATE ? (
+            <Link to={`/login`} state={{ mode: Const.MODE_USERLOGIN }} className="login-link">
               ログイン
             </Link>
           ) : (
-            <Link to={`/login`} state={{ mode: Mode.MODE_CREATE }} className="login-link">
+            <Link to={`/login`} state={{ mode: Const.MODE_USERCREATE }} className="login-link">
               新規登録
             </Link>
           )}

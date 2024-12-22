@@ -1,126 +1,53 @@
-import { isAnyArrayBuffer } from "util/types";
 import { ProjectInfo } from "../dto/ProjectInfo";
-import React, { useState, useEffect } from "react";
-import { ProjectConv } from "../util/ProjectConv";
-import { Navigate } from "react-router-dom";
-import { SearchCondition } from "../dto/SearchCondition";
-import { promises } from "dns";
-import { throws } from "assert";
+import { HttpClient, Perform } from "../util/HttpClient";
+import { ResponseConv } from "../util/ResponseConv";
 
-// APIエンドポイントEnum
-export const Perform = {
-    CREATE   : "/project/create",
-    Search   : "/project/search",
-    UPDATE   : "/project/update",
-    DELETE   : "/project/delete",
+export const ProjectPerform = {
+    CREATE: "/project/create",
+    SEARCH: "/project/search",
+    UPDATE: "/project/update",
+    DELETE: "/project/delete",
     MYPROJECT: "/project/myproject",
 } as const;
 
-type Perform = (typeof Perform)[keyof typeof Perform];
+export type ProjectPerform = (typeof ProjectPerform)[keyof typeof ProjectPerform];
 
 /**
  * プロジェクト情報用サービスクラス
  */
 export class ProjectService {
+    private client: HttpClient;
 
-    /**
-     * プロジェクト情報取得処理
-     * @returns プロジェクト一覧    
-     */
+    constructor(baseURL?: string) {
+        this.client = new HttpClient(baseURL);
+    }
+
     public async getAllProject(): Promise<Array<ProjectInfo>> {
-        // 戻り値
-        let rtn = new Array<ProjectInfo>;
-        try {
-            // APIリクエスト
-            const response = await this.transactionWithSV(null, Perform.Search);
+        const response = await this.client.callApi(null, ProjectPerform.SEARCH);
+        let projectInfo = ResponseConv.ToProjectInfo(response);
 
-            // プロジェクトリストを取得
-            const responseToJson = await response.json();
-            // プロジェクト型に詰め替え
-            rtn = ProjectConv.ToProjectInfo(responseToJson);
-
-        } catch (error) {
-            console.error("プロジェクトの取得に失敗しました:", error);
-        }
-        return rtn;
+        return projectInfo;
+    }
+    
+    public async getMyProjects(userid: string): Promise<Array<ProjectInfo>> {
+        const response = await this.client.callApi(userid.toString(), ProjectPerform.MYPROJECT);
+        let fetchedProjects = ResponseConv.ToProjectInfo(response);
+        return fetchedProjects;
     }
 
-
-    /**
-     * プロジェクト情報登録
-     * @param projectInfo プロジェクト情報
-     */
     public async regProject(projectInfo: ProjectInfo): Promise<void> {
-        try {
-            this.transactionWithSV(projectInfo, Perform.CREATE);
-        } catch (error) {
-            console.error("プロジェクトの登録に失敗しました:", error);
-        }
+        this.client.callApi(projectInfo, ProjectPerform.CREATE);
     }
 
-    /**
-     * プロジェクト情報更新
-     * @param projectInfo プロジェクト情報
-     */
     public async updateProject(projectInfo: ProjectInfo): Promise<void> {
-        try {
-            this.transactionWithSV(projectInfo, Perform.UPDATE);
-        } catch (error) {
-            console.error("プロジェクトの更新に失敗しました:", error);
-        }
+        this.client.callApi(projectInfo, ProjectPerform.UPDATE);
     }
 
-    /**
-     * プロジェクト情報削除
-     * @param projectInfo プロジェクト情報
-     */
     public async deleteProject(projectId: string): Promise<void> {
-        try {
-            this.transactionWithSV(projectId, Perform.DELETE);
-        } catch (error) {
-            console.error("プロジェクトの登録に失敗しました:", error);
-        }
+        this.client.callApi(projectId, ProjectPerform.DELETE);
     }
 
-    /**
-     * 作成プロジェクト情報取得
-     * @param searchCond 検索条件
-     * @returns プロジェクト情報
-     */
-    public async getMyProjects(searchCond: SearchCondition): Promise<Array<ProjectInfo>> {
-        // 戻り値
-        let rtn = new Array<ProjectInfo>;
-        try {
-            const response = await this.transactionWithSV(searchCond, Perform.MYPROJECT);
 
-            // プロジェクトリストを取得
-            const responseToJson = await response.json();
-            // プロジェクト型に詰め替え
-            rtn = ProjectConv.ToProjectInfo(responseToJson);
-
-        } catch (error) {
-            console.error("プロジェクトの取得に失敗しました:", error);
-        }
-        return rtn;
-    }
-
-    /**
-     * 共通SV通信処理
-     * @param param サーバー連携情報
-     */
-    private async transactionWithSV(param: any, perform: Perform): Promise<Response> {
-        // APIエンドポイントURL
-        let base = "http://localhost:8080";
-        let url = `${base}${perform}`;
-
-        // API通信
-        const response = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json", },
-            body: JSON.stringify({ param: param }),
-            mode: "cors", // CORSモードを指定
-        });
-
-        return response;
-    }
 }
+
+

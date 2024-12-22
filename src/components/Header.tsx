@@ -1,17 +1,17 @@
-import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
 import logo from "..\\src\\assets\\logo.jpg";
-import Mode from "../util/Mode";
 import { useUser } from "../util/UserContext";
+import { Const } from "../util/Const";
 
+/**
+ * ヘッダー部コンポネントクラス
+ */
 const Header = () => {
     const { user, setUser } = useUser(); // ユーザー情報とセット関数を取得
+    const navigate = useNavigate();      // 遷移用フック
 
-    // 遷移用フック
-    const navigate = useNavigate();
-
-    const handleLogout = () => {
+    const logOut = () => {
         // Contextとキャッシュをクリア
         setUser(null);
         localStorage.removeItem("userInfo");
@@ -20,13 +20,12 @@ const Header = () => {
 
     return (
         <header className="header">
-            {/* ロゴ */}
+
             <div className="logo">
                 {/* <img src={logo} alt="logo" className="logo-image"></img> */}
                 <Link to="/" >Dev.Guild</Link>
             </div>
 
-            {/* ナビゲーションメニュー */}
             <nav className="nav">
                 <ul className="nav-list">
                     <li className="nav-item">
@@ -53,12 +52,12 @@ const Header = () => {
                         <span className="welcome-message">
                             ようこそ、<strong>{user.name}</strong> さん
                         </span>
-                        <button className="logout-button" onClick={handleLogout}>
+                        <button className="logout-button" onClick={logOut}>
                             ログアウト
                         </button>
                     </div>
                 ) : (
-                    <Link to={`/login`} state={{ mode: Mode.MODE_LOGIN }} className="login-link">
+                    <Link to={`/login`} state={{ mode: Const.MODE_USERLOGIN }} className="login-link">
                         ログイン
                     </Link>
                 )}
