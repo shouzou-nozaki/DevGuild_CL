@@ -4,7 +4,7 @@ import "./MyProjects.css";
 import { useUser } from "../util/UserContext";
 import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
-import Mode from "../util/Mode";
+import { Const } from "../util/Const";
 
 const MyProjects: React.FC = () => {
     const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
@@ -44,7 +44,7 @@ const MyProjects: React.FC = () => {
                             <td>{project.Description}</td>
                             <td>{project.DueDate}</td>
                             <td>
-                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project, mode: Mode.MODE_UPDATEPROJECT }} className="edit-button">
+                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project, mode: Const.MODE_UPDATEPROJECT }} className="edit-button">
                                     編集
                                 </Link>
                             </td>

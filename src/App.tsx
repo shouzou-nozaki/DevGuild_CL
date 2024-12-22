@@ -3,8 +3,6 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import { ProjectService } from './services/ProjectService';
 import { ProjectInfo } from './dto/ProjectInfo';
-import Header from './components/Header';
-
 
 /**
  * プロジェクト一覧画面
@@ -31,18 +29,9 @@ function App() {
 
   // プロジェクトデータを取得
   useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const service = new ProjectService();
-        const response = await service.getAllProject();
-        setProjectList(response); // データを状態にセット
-      } catch (err) {
-        console.error("プロジェクトデータの取得に失敗:", err);
-      }
-    };
     fetchProjects();
   }, []);
-
+  
   // メッセージを数秒後に消す処理
   useEffect(() => {
     if (message) {
@@ -54,6 +43,16 @@ function App() {
       return () => clearTimeout(timer); // クリーンアップ
     }
   }, [message, navigate]);
+
+  const fetchProjects = async () => {
+    try {
+      const service = new ProjectService();
+      const response = await service.getAllProject();
+      setProjectList(response); // データを状態にセット
+    } catch (err) {
+      console.error("プロジェクトデータの取得に失敗:", err);
+    }
+  };
 
   return (
     <div className="container">

@@ -22,52 +22,32 @@ export class ProjectService {
         this.client = new HttpClient(baseURL);
     }
 
-    /**
-     * プロジェクト情報取得処理
-     * @returns プロジェクト一覧
-     */
     public async getAllProject(): Promise<Array<ProjectInfo>> {
         const response = await this.client.callApi(null, ProjectPerform.SEARCH);
         let projectInfo = ResponseConv.ToProjectInfo(response);
 
         return projectInfo;
     }
-
-
-    /**
-     * プロジェクト情報登録
-     * @param projectInfo プロジェクト情報
-     */
-    public async regProject(projectInfo: ProjectInfo): Promise<void> {
-        this.client.callApi(projectInfo, ProjectPerform.CREATE);
-    }
-
-    /**
-     * プロジェクト情報更新
-     * @param projectInfo プロジェクト情報
-     */
-    public async updateProject(projectInfo: ProjectInfo): Promise<void> {
-        this.client.callApi(projectInfo, ProjectPerform.UPDATE);
-    }
-
-    /**
-     * プロジェクト情報削除
-     * @param projectInfo プロジェクト情報
-     */
-    public async deleteProject(projectId: string): Promise<void> {
-        this.client.callApi(projectId, ProjectPerform.DELETE);
-    }
-
-    /**
-     * 作成プロジェクト情報取得
-     * @param searchCond 検索条件
-     * @returns プロジェクト情報
-     */
+    
     public async getMyProjects(userid: string): Promise<Array<ProjectInfo>> {
         const response = await this.client.callApi(userid.toString(), ProjectPerform.MYPROJECT);
         let fetchedProjects = ResponseConv.ToProjectInfo(response);
         return fetchedProjects;
     }
+
+    public async regProject(projectInfo: ProjectInfo): Promise<void> {
+        this.client.callApi(projectInfo, ProjectPerform.CREATE);
+    }
+
+    public async updateProject(projectInfo: ProjectInfo): Promise<void> {
+        this.client.callApi(projectInfo, ProjectPerform.UPDATE);
+    }
+
+    public async deleteProject(projectId: string): Promise<void> {
+        this.client.callApi(projectId, ProjectPerform.DELETE);
+    }
+
+
 }
 
 

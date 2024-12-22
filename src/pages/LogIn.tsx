@@ -5,13 +5,11 @@ import { AppRouter } from '../routes/AppRouter';
 
 import './Login.css';
 import { Errors } from '../dto/Errors';
-import Messages from '../util/Message';
 import { UserService } from '../services/UserService';
-import Mode from '../util/Mode';
 import { useUser } from '../util/UserContext';
 import { UserInfo } from '../dto/UserInfo';
 import { ResponseConv } from '../util/ResponseConv';
-import { userInfo } from 'os';
+import { Const } from '../util/Const';
 
 const Login = () => {
   const { setUser } = useUser();
@@ -38,13 +36,13 @@ const Login = () => {
   const formValueValid = (): boolean => {
     // 入力値を見てエラーメッセージをセット
     const errors = new Errors();
-    if (mode == Mode.MODE_CREATE && !username) errors.UserNameError = Messages.REQUIRED_USERNAME;
-    if (!email) errors.AddressError = Messages.REQIRED_EMAIL;
-    if (!password) errors.PasswordError = Messages.REQUIRED_PASSWORD;
+    if (mode == Const.MODE_USERCREATE && !username) errors.UserNameError = Const.VALIDATION_USERNAME;
+    if (!email) errors.EmailError = Const.VALIDATION_EMAIL;
+    if (!password) errors.PasswordError = Const.VALIDATION_PASSWORD;
     setErrorMessage(errors);
 
     // エラーメッセージが１件でもあれば処理を抜ける
-    if (errors.UserNameError || errors.AddressError || errors.PasswordError) return false;
+    if (errors.UserNameError || errors.EmailError || errors.PasswordError) return false;
 
     return true;
   }
@@ -67,7 +65,7 @@ const Login = () => {
       if (!formValueValid()) return;
 
       // ログイン表示モードの場合は、ユーザー名入力をクリアする
-      if (mode === Mode.MODE_LOGIN) setUsername("");
+      if (mode === Const.MODE_USERLOGIN) setUsername("");
 
       // ログイン処理実行
       const service = new UserService();
@@ -105,7 +103,7 @@ const Login = () => {
         <h1 className="login-title">{mode}</h1>
 
         {/* ユーザー名 */}
-        {mode == Mode.MODE_CREATE && (
+        {mode == Const.MODE_USERLOGIN && (
           <div className="form-group">
             <label htmlFor="username">ユーザー名</label>
             {/* エラーメッセージ */}
@@ -124,7 +122,7 @@ const Login = () => {
         <div className="form-group">
           <label htmlFor="username">メールアドレス</label>
           {/* エラーメッセージ */}
-          {errorMessage.AddressError && <div className="error_message">{errorMessage.AddressError}</div>}
+          {errorMessage.EmailError && <div className="error_message">{errorMessage.EmailError}</div>}
           <input
             type="text"
             id="address"
@@ -155,12 +153,12 @@ const Login = () => {
 
         <div className="login-links">
           <a href="#">パスワードを忘れた方はこちら</a>
-          {mode == Mode.MODE_CREATE ? (
-            <Link to={`/login`} state={{ mode: Mode.MODE_LOGIN }} className="login-link">
+          {mode == Const.MODE_USERCREATE ? (
+            <Link to={`/login`} state={{ mode: Const.MODE_USERLOGIN }} className="login-link">
               ログイン
             </Link>
           ) : (
-            <Link to={`/login`} state={{ mode: Mode.MODE_CREATE }} className="login-link">
+            <Link to={`/login`} state={{ mode: Const.MODE_USERCREATE }} className="login-link">
               新規登録
             </Link>
           )}

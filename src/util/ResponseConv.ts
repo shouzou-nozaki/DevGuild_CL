@@ -6,11 +6,7 @@ import { UserInfo } from "../dto/UserInfo";
  * レスポンスデータ変換クラス
  */
 export class ResponseConv {
-    /**
-     * プロジェクト情報に変換
-     * @param response レスポンス
-     * @returns プロジェクト情報
-     */
+
     public static async ToProjectInfo(response: Response): Promise<Array<ProjectInfo>> {
         const rtn: Array<ProjectInfo> = [];
         const responseData = await response.json();
@@ -30,6 +26,7 @@ export class ResponseConv {
         return rtn;
     }
 
+    
     public static async ToUserInfo(response: Response): Promise<UserInfo> {
         const userInfo = new UserInfo();
         const responseData = await response.json();
