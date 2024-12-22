@@ -17,18 +17,12 @@ const MyProjects: React.FC = () => {
 
     const fetchProjects = async () => {
         try {
-            // 検索情報を設定
-            const searchCond = {
-                userid: user?.id ?? "", // ユーザーID
-            };
-            // API通信を行い、プロジェクトを取得
             const service = new ProjectService();
-            const response = await service.getMyProjects(searchCond);
-            // 取得したプロジェクトをセット
-            setProjectList(response);
-        } catch (err) {
+            const response = await service.getMyProjects(user?.id ?? "");
+            setProjectList(response); // データを状態にセット
+          } catch (err) {
             console.error("プロジェクトデータの取得に失敗:", err);
-        }
+          }
     }
 
     return (

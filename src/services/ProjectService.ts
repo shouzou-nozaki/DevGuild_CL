@@ -1,13 +1,13 @@
 import { ProjectInfo } from "../dto/ProjectInfo";
 import { HttpClient, Perform } from "../util/HttpClient";
-import { ProjectConv } from "../util/ProjectConv";
+import { ResponseConv } from "../util/ResponseConv";
 
 export const ProjectPerform = {
     CREATE: "/project/create",
     SEARCH: "/project/search",
     UPDATE: "/project/update",
     DELETE: "/project/delete",
-    MYPROJECT: "/project/myprojects",
+    MYPROJECT: "/project/myproject",
 } as const;
 
 export type ProjectPerform = (typeof ProjectPerform)[keyof typeof ProjectPerform];
@@ -28,11 +28,9 @@ export class ProjectService {
      */
     public async getAllProject(): Promise<Array<ProjectInfo>> {
         const response = await this.client.callApi(null, ProjectPerform.SEARCH);
-        const jsonResponse = await response.json(); // ここで結果を変数に格納
-        console.log(jsonResponse);
-        let fetchedProjects  = ProjectConv.ToProjectInfo(jsonResponse);
+        let projectInfo = ResponseConv.ToProjectInfo(response);
 
-        return fetchedProjects;
+        return projectInfo;
     }
 
 
@@ -65,12 +63,10 @@ export class ProjectService {
      * @param searchCond 検索条件
      * @returns プロジェクト情報
      */
-    public async getMyProjects(searchCond: any): Promise<Array<ProjectInfo>> {
-        const response = await this.client.callApi(null, ProjectPerform.MYPROJECT);
-        let fetchedProjects  = ProjectConv.ToProjectInfo(response);
-
+    public async getMyProjects(userid: string): Promise<Array<ProjectInfo>> {
+        const response = await this.client.callApi(userid.toString(), ProjectPerform.MYPROJECT);
+        let fetchedProjects = ResponseConv.ToProjectInfo(response);
         return fetchedProjects;
-
     }
 }
 

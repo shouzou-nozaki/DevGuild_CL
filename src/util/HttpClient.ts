@@ -1,28 +1,3 @@
-// export interface Perform {
-//     Search(arg0: null, Search: any): unknown;
-// };
-
-// // サーバー通信処理の共通基盤クラス
-// export class HttpClient {
-//     static readonly baseURL = "http://localhost:8080"; // エンドポイントのベースURL
-
-//     public static async callApi(param: any, perform: Perform): Promise<Response> {
-//         const url = `${this.baseURL}${perform}`; // エンドポイントURLの生成
-//         const response = await fetch(url, {
-//             method: "POST",
-//             headers: { "Content-Type": "application/json" },
-//             body: JSON.stringify(param), // パラメータを送信
-//             mode: "cors",
-//         });
-
-//         if (!response.ok) {
-//             throw new Error(`API Error: ${response.status} ${response.statusText}`);
-//         }
-
-//         return response; // レスポンスを返却
-//     }
-// }
-
 
 // Perform 型の改善
 export type Perform = string;
