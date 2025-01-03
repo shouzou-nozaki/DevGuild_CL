@@ -1,6 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
 import "./Header.css";
-import logo from "..\\src\\assets\\logo.jpg";
 import { useUser } from "../util/UserContext";
 import { Const } from "../util/Const";
 
@@ -11,6 +10,9 @@ const Header = () => {
     const { user, setUser } = useUser(); // ユーザー情報とセット関数を取得
     const navigate = useNavigate();      // 遷移用フック
 
+    /**
+     * ログアウト処理
+     */
     const logOut = () => {
         // Contextとキャッシュをクリア
         setUser(null);
@@ -22,7 +24,6 @@ const Header = () => {
         <header className="header">
 
             <div className="logo">
-                {/* <img src={logo} alt="logo" className="logo-image"></img> */}
                 <Link to="/" >Dev.Guild</Link>
             </div>
 
@@ -57,7 +58,7 @@ const Header = () => {
                         </button>
                     </div>
                 ) : (
-                    <Link to={`/login`} state={{ mode: Const.MODE_USERLOGIN }} className="login-link">
+                    <Link to={`/login`} className="login-link">
                         ログイン
                     </Link>
                 )}

@@ -10,19 +10,19 @@ import { ProjectInfo } from './dto/ProjectInfo';
 function App() {
   const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
   const [currentPage, setCurrentPage] = useState(1); // 現在のページ
-  
   const itemsPerPage = 10; // 1ページあたりの表示件数
+
   // 遷移用フック
   const navigate = useNavigate();
-  // 遷移元からメッセージ取得
   const location = useLocation();
   const [message, setMessage] = useState<string | null>(location.state?.message || null);
+
   // ページごとのデータを抽出
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProjects = projectList.slice(indexOfFirstItem, indexOfLastItem);
-  // ページ数の計算
-  const totalPages = Math.ceil(projectList.length / itemsPerPage);
+  const indexOfLastItem = currentPage * itemsPerPage;              // 現在のページの最後のアイテム
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;         // 現在のページの最初のアイテム
+  const currentProjects = projectList.slice(indexOfFirstItem, indexOfLastItem); // 現在のページに表示するアイテム
+  const totalPages = Math.ceil(projectList.length / itemsPerPage); // ページ数の計算
+
   // ページ切り替え処理
   const paginate = (pageNumber: React.SetStateAction<number>) => setCurrentPage(pageNumber);
 
@@ -31,16 +31,16 @@ function App() {
   useEffect(() => {
     fetchProjects();
   }, []);
-  
-  // メッセージを数秒後に消す処理
+
   useEffect(() => {
+    // メッセージがある場合は5秒後に消す
     if (message) {
       const timer = setTimeout(() => {
-        setMessage(null); // メッセージを消す
-        navigate("/", { state: null }); // URLのstateもリセット
-      }, 5000); // 5秒後に消す
+        setMessage(null);
+        navigate("/", { state: null });
+      }, 5000);
 
-      return () => clearTimeout(timer); // クリーンアップ
+      return () => clearTimeout(timer);
     }
   }, [message, navigate]);
 
@@ -49,8 +49,8 @@ function App() {
       const service = new ProjectService();
       const response = await service.getAllProject();
       setProjectList(response); // データを状態にセット
-    } catch (err) {
-      console.error("プロジェクトデータの取得に失敗:", err);
+    } catch (error) {
+      console.error(error);
     }
   };
 

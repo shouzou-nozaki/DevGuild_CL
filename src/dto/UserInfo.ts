@@ -1,4 +1,4 @@
-// ユーザーオブジェクト
+// ユーザー情報型クラスオブジェクト
 export class UserInfo{
     UserId: string = "";   // ユーザーID
     Name : string = "";    // ユーザー名

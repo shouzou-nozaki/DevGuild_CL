@@ -50,7 +50,7 @@ input:focus {
 }
 
 /* ログインボタン */
-.login-button {
+.discord-login-button {
   width: 100%;
   padding: 0.8rem;
   background-color: #007bff;

@@ -6,23 +6,28 @@ import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
 import { Const } from "../util/Const";
 
-const MyProjects: React.FC = () => {
+const MyProjects = () => {
     const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
     const { user } = useUser(); // ユーザー情報とセット関数を取得
 
-    // 初期処理
     useEffect(() => {
         fetchProjects();
     }, []);
 
+    /**
+     * プロジェクトデータを取得
+     */
     const fetchProjects = async () => {
         try {
+            if (user === null || user.id === "") {
+                throw new Error("ユーザー情報が取得できませんでした。");
+            }
             const service = new ProjectService();
-            const response = await service.getMyProjects(user?.id ?? "");
-            setProjectList(response); // データを状態にセット
-          } catch (err) {
-            console.error("プロジェクトデータの取得に失敗:", err);
-          }
+            const response = await service.getMyProjects(user.id);
+            setProjectList(response);
+        } catch (err) {
+            console.error(err);
+        }
     }
 
     return (
@@ -44,7 +49,7 @@ const MyProjects: React.FC = () => {
                             <td>{project.Description}</td>
                             <td>{project.DueDate}</td>
                             <td>
-                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project, mode: Const.MODE_UPDATEPROJECT }} className="edit-button">
+                                <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project, mode: Const.MODE_UPDATE_PROJECT }} className="edit-button">
                                     編集
                                 </Link>
                             </td>
