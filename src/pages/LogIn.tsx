@@ -3,19 +3,24 @@ import { useNavigate } from "react-router-dom";
 import "./Login.css";
 import { useUser } from "../util/UserContext";
 
+/**
+ * ログイン画面
+ */
 const Login = () => {
   const navigate = useNavigate();
   const { setUser } = useUser();
 
-  // Discordログイン処理
-  const handleDiscordLogin = () => {
+  /**
+   * Discordログインボタン押下処理
+   */
+  const loginByDiscord = () => {
     const clientId = process.env.REACT_APP_DISCORD_CLIENT_ID;       // クライアントID
     const redirectUri = process.env.REACT_APP_DISCORD_REDIRECT_URI; // リダイレクトURI
     const responseType = "code";    // レスポンスタイプ
     const scope = "identify email"; // スコープ
 
     if (!clientId || !redirectUri) {
-      console.error("DiscordのクライアントIDまたはリダイレクトURIが設定されていません");
+      console.error("環境変数が不足しています");
       return;
     }
 
@@ -27,7 +32,6 @@ const Login = () => {
     window.location.href = discordAuthUrl;
   };
 
-  // サーバーからのレスポンスをチェック
   useEffect(() => {
     // URLパラメータからDiscordユーザー情報を取得
     const urlParams = new URLSearchParams(window.location.search);
@@ -36,15 +40,16 @@ const Login = () => {
 
     if (!username || !userId) return;
 
+    // Discordユーザー情報をキャッシュに保存
     cacheDiscordUser(username, userId);
 
-    navigate("/"); // リダイレクト
+    navigate("/");
   }, [navigate]);
 
   /**
    * Discordユーザー情報をキャッシュに保存
-   * @param username 
-   * @param userId 
+   * @param username Discordユーザー名
+   * @param userId DiscordユーザーID
    */
   const cacheDiscordUser = (username: string, userId: string) => {
     // ログイン情報をキャッシュに保存
@@ -59,7 +64,7 @@ const Login = () => {
   return (
     <div className="login-container">
       <h1>Discordログイン</h1>
-      <button onClick={handleDiscordLogin} className="discord-login-button">
+      <button onClick={loginByDiscord} className="discord-login-button">
         Discordでログイン
       </button>
     </div>
