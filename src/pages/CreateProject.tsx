@@ -51,7 +51,7 @@ const CreateProject = () => {
     /**
      * プロジェクト作成ボタン押下処理
      */
-    const createProject = () => {
+    const createProject = async () => {
         try {
             // 入力値チェック
             if (!validateForm()) return;
@@ -61,11 +61,17 @@ const CreateProject = () => {
             // データ登録
             const service = new ProjectService();
             if (mode == Const.MODE_CREATE_PROJECT) {
-                service.regProject(projectInfoForService);
+                const param = { projectInfo: projectInfoForService, accessToken: user?.token.toString() }
+                service.regProject(param);
+
             } else if (mode == Const.MODE_UPDATE_PROJECT) {
                 service.updateProject(projectInfoForService);
             }
 
+            if (process.env.REACT_APP_DISCORD_TEMPLATE_URL) {
+                // 新しいタブで指定したURLを開く
+                window.open(process.env.REACT_APP_DISCORD_TEMPLATE_URL, '_blank');
+            }
             navigate("/", { state: { message: Const.PROJECT_CREATE_SUCCESS } });
         } catch (error) {
             console.error(error);

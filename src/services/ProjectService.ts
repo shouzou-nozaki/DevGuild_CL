@@ -46,9 +46,9 @@ export class ProjectService {
 
     }
 
-    public async regProject(projectInfo: ProjectInfo): Promise<void> {
+    public async regProject(param:any): Promise<void> {
         try {
-            this.client.postApi(projectInfo, ProjectPerform.CREATE);
+            this.client.postApi(param, ProjectPerform.CREATE);
         } catch (error) {
             throw error;
         }
