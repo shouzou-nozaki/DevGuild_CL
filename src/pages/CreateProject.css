@@ -19,6 +19,7 @@
 }
 
 /* 各項目入力欄共通 */
+.container_itemlist .container_item .discordServerId,
 .container_itemlist .container_item .projectName,
 .container_itemlist .container_item .reqruiteNumber,
 .container_itemlist .container_item .duedate,

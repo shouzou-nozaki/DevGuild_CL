@@ -39,6 +39,7 @@ const MyProjects = () => {
                         <th>プロジェクト名</th>
                         <th>説明</th>
                         <th>期限日</th>
+                        <th>状態</th>
                         <th>アクション</th>
                     </tr>
                 </thead>
@@ -48,6 +49,8 @@ const MyProjects = () => {
                             <td>{project.ProjectName}</td>
                             <td>{project.Description}</td>
                             <td>{project.DueDate}</td>
+                            {project.Status === "0" ? <td className="status_private">非公開</td> : <td className="status_public">公開</td>}
+                            
                             <td>
                                 <Link to={`/create?projectId=${project.ProjectId}`} state={{ projectInfo: project, mode: Const.MODE_UPDATE_PROJECT }} className="edit-button">
                                     編集

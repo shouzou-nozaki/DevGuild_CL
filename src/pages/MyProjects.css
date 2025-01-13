@@ -26,3 +26,13 @@
 .edit-button:hover {
     background-color: #0056b3;
 }
+
+.status_private {
+    font-weight: bold;
+    color: #d9534f; /* 落ち着いた赤 */
+  }
+  
+  .status_public {
+    font-weight: bold;
+    color: #5bc0de; /* 淡い青 */
+  }
