@@ -17,15 +17,36 @@
 
 .edit-button {
     color: white;
-    background-color: #007bff;
+    background-color: #28a745;
     padding: 5px 10px;
     text-decoration: none;
     border-radius: 4px;
+    text-align: center;
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: #228d3b;
 }
+
+.public_button {
+    color: white;
+    background-color: #5bc0de;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-left:5px;
+}
+
+.public_button:hover{
+    background-color: #4ea3bd;
+}
+
+.public_button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+    opacity: 50%;
+}
+
 
 .status_private {
     font-weight: bold;
