@@ -8,5 +8,5 @@ export class ProjectInfo{
     DueDate : string  = "";        // 締切日
     Description : string = "";     // 説明
     Requirements: Array<string> = new Array<string>(); // 求めるスキル
-    Status:string = "";            // 状態
+    Status:string = "";            // 状態(0:非公開 1:BOT招待済み 2:公開可能 3:公開)
 }

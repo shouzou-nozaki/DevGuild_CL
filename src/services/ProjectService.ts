@@ -60,7 +60,6 @@ export class ProjectService {
         } catch (error) {
             throw error;
         }
-
     }
 
     public async deleteProject(projectId: string): Promise<void> {
@@ -70,6 +69,8 @@ export class ProjectService {
             throw error;
         }
     }
+
+
 }
 
 

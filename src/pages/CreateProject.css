@@ -37,6 +37,37 @@
     font-size: 1em;
 }
 
+
+.container_itemlist .container_item .discordServerId {
+    width: 70%;
+}
+
+.invite_button {
+    color: white;
+    background-color: #5865F2; /* Discordっぽい紫 */
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-left: 5px;
+    font-weight: bold;
+    border: none; /* 境界線なし */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* ほんのり影をつけて立体感 */
+    transition: background-color 0.3s ease, box-shadow 0.3s ease; /* スムーズなホバー効果 */
+    height: 35px;
+}
+
+.invite_button:hover {
+    background-color: #4752C4; /* 少し濃いめの紫でホバー効果 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3); /* ホバー時に影を濃くする */
+    cursor: pointer;
+}
+
+.invite_button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+    opacity: 50%;
+}
+
 /* 説明欄 */
 .container_itemlist .container_item .description {
     height: 100px;

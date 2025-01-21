@@ -29,6 +29,7 @@ const CreateProject = () => {
 
     let projectInfoForService = new ProjectInfo(); // サービスクラス引き渡し用プロジェクト情報
 
+
     useEffect(() => {
         setProjectId("");        // プロジェクトID
         setDiscordServerId("");  // DiscordServer ID
@@ -49,7 +50,7 @@ const CreateProject = () => {
             setRequirements(projectInfoFromEdit.Requirements);       // 要求事項
             return;
         }
-    }, [])
+    }, [mode])
 
     /**
      * プロジェクト作成ボタン押下処理
@@ -66,10 +67,6 @@ const CreateProject = () => {
             if (mode == Const.MODE_CREATE_PROJECT) {
                 const param = { projectInfo: projectInfoForService, accessToken: user?.token.toString() }
                 service.regProject(param);
-
-                // 新しいタブで指定したURLを開く
-                if (process.env.REACT_APP_DISCORD_TEMPLATE_URL) window.open(process.env.REACT_APP_DISCORD_TEMPLATE_URL, '_blank');
-
             } else if (mode == Const.MODE_UPDATE_PROJECT) {
                 service.updateProject(projectInfoForService);
             }
@@ -155,6 +152,7 @@ const CreateProject = () => {
         projectInfoForService.DueDate = dueDate;                  // 締切日
         projectInfoForService.Description = description;          // 説明
         projectInfoForService.Requirements = requirementList;     // 求めるスキル
+        projectInfoForService.Status = Const.STATUS_CLOSE;        // プロジェクト状態
     }
 
     /**
@@ -168,6 +166,34 @@ const CreateProject = () => {
         navigate("/");
     }
 
+    /**
+     * DiscordServer作成メソッド
+     */
+    const createDiscordServe = () => {
+        const templateServerUrl = process.env.REACT_APP_DISCORD_TEMPLATE_URL;
+        if (!templateServerUrl) {
+            console.error("環境変数が不足しています");
+            return;
+        }
+        window.open(templateServerUrl, '_blank');
+    }
+
+    /**
+     * DiscordBotへのサーバー招待メソッド
+     * @returns 
+     */
+    const inviteDiscordBotToServer = () => {
+        const clientId = process.env.REACT_APP_DISCORD_CLIENT_ID;
+        const redirectUri = process.env.REACT_APP_DISCORD_ASSIGNMENT_URI; // リダイレクトURI
+        if (!clientId || !redirectUri) {
+            console.error("環境変数が不足しています");
+            return;
+        }
+        // DiscordBOT招待URL
+        const botInviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot`;
+        window.open(botInviteUrl, '_blank');
+    }
+
     return (
         <div className="container">
             {/* ページタイトル */}
@@ -177,14 +203,15 @@ const CreateProject = () => {
             }
             <div className="container_itemlist">
                 {/* Discordサーバー ID */}
-                {mode === Const.MODE_UPDATE_PROJECT && (
-                    <div className="container_item">
-                        <label className="item_title" htmlFor="discordServerId">DiscordServer ID</label>
-                        <input className="discordServerId" type="text" id="discordServerId" name="discordServerId" placeholder="DiscordServer ID"
-                            onChange={(event) => setDiscordServerId(event.target.value)}
-                            value={discordServerId} />
-                    </div>
-                )}
+                <div className="container_item">
+                    <label className="item_title" htmlFor="discordServerId">
+                        DiscordServer ID</label>
+                    <input className="discordServerId" type="text" id="discordServerId" name="discordServerId" placeholder="Dev.Guildの参加しているサーバーのIDを入力してください。"
+                        onChange={(event) => setDiscordServerId(event.target.value)}
+                        value={discordServerId} />
+                    <button className="invite_button" onClick={createDiscordServe}>サーバー作成</button>
+                    <button className="invite_button" onClick={inviteDiscordBotToServer}>Bot招待</button>
+                </div>
 
                 {/* <!-- プロジェクト名 --> */}
                 <div className="container_item">

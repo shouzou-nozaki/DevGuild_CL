@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, redirect, useNavigate } from "react-router-dom";
 import "./MyProjects.css";
 import { useUser } from "../util/UserContext";
 import { ProjectService } from "../services/ProjectService";
@@ -12,8 +12,10 @@ const MyProjects = () => {
     const navigate = useNavigate(); // 遷移用フック
 
     useEffect(() => {
-        fetchProjects();
-    }, []);
+        if (user && user.id) {
+            fetchProjects();
+        }
+    }, [user]);
 
     /**
      * プロジェクトデータを取得
@@ -51,17 +53,20 @@ const MyProjects = () => {
     }
 
     /**
-     * DiscordBotへのサーバー招待メソッド
+     * プロジェクト状態変更メソッド
+     * @param projectInfo 
      */
-    const inviteDiscordBotToServer = () => {
-        const clientId = process.env.REACT_APP_DISCORD_CLIENT_ID;
-        if (!clientId) {
-            console.error("環境変数が不足しています");
-            return;
+    const publishProject = (projectInfo: ProjectInfo) => {
+        // プロジェクト状態を反転させる
+        if (projectInfo.Status === Const.STATUS_OPEN) {
+            projectInfo.Status = Const.STATUS_CLOSE;
+        }else{
+            projectInfo.Status = Const.STATUS_OPEN;
         }
-        // DiscordBOT招待URL
-        const botInviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot`;
-        window.open(botInviteUrl, '_blank');
+        const service = new ProjectService;
+        service.updateProject(projectInfo);
+
+        window.location.reload();
     }
 
     return (
@@ -83,14 +88,20 @@ const MyProjects = () => {
                             <td>{project.ProjectName}</td>
                             <td>{project.Description}</td>
                             <td>{project.DueDate}</td>
-                            {project.Status === "0" ? <td className="status_private">非公開</td> : <td className="status_public">公開</td>}
+                            {project.Status === Const.STATUS_OPEN ? <td className="status_public">公開</td> : <td className="status_private">非公開</td>}
                             <td>
                                 <button onClick={() => toEditWindow(project)} className="edit-button">
                                     編集
                                 </button>
-                                <button className="public_button" disabled={!hasDiscordServerID(project)} onClick={inviteDiscordBotToServer}>
-                                    公開
-                                </button>
+                                {project.Status === Const.STATUS_OPEN ?
+                                    <button className="suppress_button" disabled={!hasDiscordServerID(project)} onClick={() => publishProject(project)}>
+                                        非公開
+                                    </button>
+                                    :
+                                    <button className="publish_button" disabled={!hasDiscordServerID(project)} onClick={() => publishProject(project)}>
+                                        公開
+                                    </button>
+                                }
                             </td>
                         </tr>
                     ))}
