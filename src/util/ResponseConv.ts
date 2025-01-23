@@ -26,6 +26,8 @@ export class ResponseConv {
                 projectInfo.Description = data.description;         // 説明
                 projectInfo.Requirements = data.requirements;       // 必要スキル
                 projectInfo.UserId = data.userId;                   // ユーザーID  
+                projectInfo.Status = data.status;                   // プロジェクト状態
+                projectInfo.DiscordServerId = data.discordServerId; // DiscordServerID
                 rtn.push(projectInfo);
             });
 

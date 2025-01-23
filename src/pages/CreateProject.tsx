@@ -11,6 +11,7 @@ import { Const } from '../util/Const';
  */
 const CreateProject = () => {
     const [projectId, setProjectId] = useState('');                      // プロジェクトID
+    const [discordServerId, setDiscordServerId] = useState('');          // DiscordServer ID
     const [projectName, setProjectName] = useState('');                  // プロジェクト名
     const [recruiteNumber, setRecruiteNumber] = useState('');            // 募集人数
     const [dueDate, setDueDate] = useState('');                          // 締切日
@@ -28,8 +29,10 @@ const CreateProject = () => {
 
     let projectInfoForService = new ProjectInfo(); // サービスクラス引き渡し用プロジェクト情報
 
+
     useEffect(() => {
         setProjectId("");        // プロジェクトID
+        setDiscordServerId("");  // DiscordServer ID
         setProjectName("");      // プロジェクト名
         setRecruiteNumber("");   // 募集人数
         setDueDate("");          // 期限日
@@ -38,15 +41,16 @@ const CreateProject = () => {
 
         // 編集画面からの遷移時、プロジェクト情報をセット
         if (mode == Const.MODE_UPDATE_PROJECT) {
-            setProjectId(projectInfoFromEdit.ProjectId);           // プロジェクトID
-            setProjectName(projectInfoFromEdit.ProjectName);       // プロジェクト名
-            setRecruiteNumber(projectInfoFromEdit.RecruiteNumber); // 募集人数
-            setDueDate(projectInfoFromEdit.DueDate);               // 期限日
-            setDescription(projectInfoFromEdit.Description);       // 説明
-            setRequirements(projectInfoFromEdit.Requirements);     // 要求事項
+            setProjectId(projectInfoFromEdit.ProjectId);             // プロジェクトID
+            setDiscordServerId(projectInfoFromEdit.DiscordServerId); // DiscordServer ID
+            setProjectName(projectInfoFromEdit.ProjectName);         // プロジェクト名
+            setRecruiteNumber(projectInfoFromEdit.RecruiteNumber);   // 募集人数
+            setDueDate(projectInfoFromEdit.DueDate);                 // 期限日
+            setDescription(projectInfoFromEdit.Description);         // 説明
+            setRequirements(projectInfoFromEdit.Requirements);       // 要求事項
             return;
         }
-    }, [])
+    }, [mode])
 
     /**
      * プロジェクト作成ボタン押下処理
@@ -63,15 +67,10 @@ const CreateProject = () => {
             if (mode == Const.MODE_CREATE_PROJECT) {
                 const param = { projectInfo: projectInfoForService, accessToken: user?.token.toString() }
                 service.regProject(param);
-
             } else if (mode == Const.MODE_UPDATE_PROJECT) {
                 service.updateProject(projectInfoForService);
             }
 
-            if (process.env.REACT_APP_DISCORD_TEMPLATE_URL) {
-                // 新しいタブで指定したURLを開く
-                window.open(process.env.REACT_APP_DISCORD_TEMPLATE_URL, '_blank');
-            }
             navigate("/", { state: { message: Const.PROJECT_CREATE_SUCCESS } });
         } catch (error) {
             console.error(error);
@@ -147,6 +146,7 @@ const CreateProject = () => {
     const makeProjectInfoForService = () => {
         projectInfoForService.UserId = user?.id.toString() ?? ""; // ユーザーID
         projectInfoForService.ProjectId = projectId;              // プロジェクトID
+        projectInfoForService.DiscordServerId = discordServerId;  // DiscordサーバーID
         projectInfoForService.ProjectName = projectName;          // プロジェクト名
         projectInfoForService.RecruiteNumber = recruiteNumber;    // 募集人数
         projectInfoForService.DueDate = dueDate;                  // 締切日
@@ -158,7 +158,39 @@ const CreateProject = () => {
      * プロジェクト一覧へ戻る
      */
     const Back = () => {
+        if (mode == Const.MODE_UPDATE_PROJECT) {
+            navigate("/myprojects");
+            return;
+        }
         navigate("/");
+    }
+
+    /**
+     * DiscordServer作成メソッド
+     */
+    const createDiscordServe = () => {
+        const templateServerUrl = process.env.REACT_APP_DISCORD_TEMPLATE_URL;
+        if (!templateServerUrl) {
+            console.error("環境変数が不足しています");
+            return;
+        }
+        window.open(templateServerUrl, '_blank');
+    }
+
+    /**
+     * DiscordBotへのサーバー招待メソッド
+     * @returns 
+     */
+    const inviteDiscordBotToServer = () => {
+        const clientId = process.env.REACT_APP_DISCORD_CLIENT_ID;
+        const redirectUri = process.env.REACT_APP_DISCORD_ASSIGNMENT_URI; // リダイレクトURI
+        if (!clientId || !redirectUri) {
+            console.error("環境変数が不足しています");
+            return;
+        }
+        // DiscordBOT招待URL
+        const botInviteUrl = `https://discord.com/api/oauth2/authorize?client_id=${clientId}&permissions=8&scope=bot`;
+        window.open(botInviteUrl, '_blank');
     }
 
     return (
@@ -169,6 +201,17 @@ const CreateProject = () => {
                 <h1 className="page_title">{Const.MODE_CREATE_PROJECT}</h1>
             }
             <div className="container_itemlist">
+                {/* Discordサーバー ID */}
+                <div className="container_item">
+                    <label className="item_title" htmlFor="discordServerId">
+                        DiscordServer ID</label>
+                    <input className="discordServerId" type="text" id="discordServerId" name="discordServerId" placeholder="Dev.Guildの参加しているサーバーのIDを入力してください。"
+                        onChange={(event) => setDiscordServerId(event.target.value)}
+                        value={discordServerId} />
+                    <button className="invite_button" onClick={createDiscordServe}>サーバー作成</button>
+                    <button className="invite_button" onClick={inviteDiscordBotToServer}>Bot招待</button>
+                </div>
+
                 {/* <!-- プロジェクト名 --> */}
                 <div className="container_item">
                     <label className="item_title" htmlFor="projectName">プロジェクト名<span className="requiredInput">*</span></label>

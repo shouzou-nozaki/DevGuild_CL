@@ -4,6 +4,9 @@
  * 　　　　　  対象_アクション名_(項目名)_(状態)
  */
 export class Const {
+    public static readonly STATUS_CLOSE = "0";
+    public static readonly STATUS_OPEN = "1";
+
     public static readonly PROJECT_CREATE_SUCCESS = "プロジェクトを作成しました。";
     public static readonly PROJECT_UPDATE_SUCCESS = "プロジェクトを更新しました。";
     public static readonly PROJECT_DELETE_SUCCESS = "プロジェクトを削除しました。";

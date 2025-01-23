@@ -17,12 +17,69 @@
 
 .edit-button {
     color: white;
-    background-color: #007bff;
+    background-color: #28a745;
     padding: 5px 10px;
     text-decoration: none;
     border-radius: 4px;
+    text-align: center;
+    border: none;
 }
 
 .edit-button:hover {
-    background-color: #0056b3;
+    background-color: #228d3b;
 }
+
+
+.publish_button {
+    color: white;
+    background-color: #5bc0de;
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-left:5px;
+    border: none;
+}
+
+.publish_button:hover{
+    background-color: #4ea3bd;
+}
+
+.publish_button:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+    opacity: 50%;
+}
+
+
+.suppress_button {
+    color: white;
+    background-color: #dc3545; /* 鮮やかな赤 */
+    padding: 5px 10px;
+    text-decoration: none;
+    border-radius: 4px;
+    margin-left:5px;
+    border: none;
+}
+
+.suppress_button:hover {
+    background-color: #c82333; /* 濃い赤でホバー時を目立たせる */
+}
+
+.suppress_button:disabled {
+    background-color: #a9a9a9; /* 無効時はグレー */
+    cursor: not-allowed;
+    opacity: 50%;
+}
+
+
+
+
+.status_private {
+    font-weight: bold;
+    color: #d9534f;
+  }
+  
+  .status_public {
+    font-weight: bold;
+    color: #5bc0de;
+  }
