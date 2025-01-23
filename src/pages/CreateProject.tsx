@@ -152,7 +152,6 @@ const CreateProject = () => {
         projectInfoForService.DueDate = dueDate;                  // 締切日
         projectInfoForService.Description = description;          // 説明
         projectInfoForService.Requirements = requirementList;     // 求めるスキル
-        projectInfoForService.Status = Const.STATUS_CLOSE;        // プロジェクト状態
     }
 
     /**
