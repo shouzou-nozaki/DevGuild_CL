@@ -8,6 +8,7 @@ import { BrowserRouter, Router } from 'react-router-dom'
 import { AppRouter } from './routes/AppRouter';
 import Header from './components/Header';
 import { UserProvider } from './util/UserContext';
+import { ToastContainer } from 'react-toastify';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -18,6 +19,7 @@ root.render(
       <UserProvider>
         <Header />
         <AppRouter />
+        <ToastContainer />
       </UserProvider>
     </BrowserRouter>
   </React.StrictMode>

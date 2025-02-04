@@ -24,7 +24,6 @@
     text-align: center;
     border: none;
 }
-
 .edit-button:hover {
     background-color: #228d3b;
 }
@@ -39,11 +38,9 @@
     margin-left:5px;
     border: none;
 }
-
 .publish_button:hover{
     background-color: #4ea3bd;
 }
-
 .publish_button:disabled {
     background-color: gray;
     cursor: not-allowed;
@@ -60,19 +57,14 @@
     margin-left:5px;
     border: none;
 }
-
 .suppress_button:hover {
     background-color: #c82333; /* 濃い赤でホバー時を目立たせる */
 }
-
 .suppress_button:disabled {
     background-color: #a9a9a9; /* 無効時はグレー */
     cursor: not-allowed;
     opacity: 50%;
 }
-
-
-
 
 .status_private {
     font-weight: bold;
@@ -83,3 +75,4 @@
     font-weight: bold;
     color: #5bc0de;
   }
+

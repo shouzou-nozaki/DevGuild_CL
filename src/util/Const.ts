@@ -23,4 +23,6 @@ export class Const {
 
     public static readonly MODE_CREATE_PROJECT = "応募作成";
     public static readonly MODE_UPDATE_PROJECT = "応募変更";
+
+    public static readonly MESSAGE_SEND_SUCCESS = "プロジェクトへの参加申請を行いました。";
 }

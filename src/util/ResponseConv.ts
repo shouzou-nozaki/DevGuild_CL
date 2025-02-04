@@ -1,5 +1,5 @@
+import { Message } from "../dto/Message";
 import { ProjectInfo } from "../dto/ProjectInfo"
-import { UserInfo } from "../dto/UserInfo";
 
 
 /**
@@ -30,7 +30,6 @@ export class ResponseConv {
                 projectInfo.DiscordServerId = data.discordServerId; // DiscordServerID
                 rtn.push(projectInfo);
             });
-
             return rtn;
         } catch (error) {
             throw error;
@@ -38,20 +37,27 @@ export class ResponseConv {
     }
 
     /**
-     * プロジェクト情報型への変換処理
-     * @param response レスポンスデータ
-     * @returns ユーザー情報
+     * Notifications型への変換処理
+     * @param response サーバーからのレスポンスデータ
+     * @returns Noitifications型
      */
-    public static async toUserInfo(response: Response): Promise<UserInfo> {
+    public static async toMessageInfo(response: Response): Promise<Array<Message>> {
         try {
-            const userInfo = new UserInfo();
+            const rtn: Array<Message> = [];
             const responseData = await response.json();
 
             responseData.forEach((data: any) => {
-                userInfo.UserId = data.userId;  // ユーザーID
-                userInfo.Name = data.userName;  // ユーザー名
+                const message = new Message();
+                message.id = data.id;               // ID
+                message.userId = data.userId;       // 通知を受け取るユーザーのID
+                message.message = data.message;     // 通知の詳細メッセージ
+                message.isRead = data.isRead;       // 既読状態
+                message.createdAt = data.createdAt; // 通知作成日時
+                message.updatedAt = data.updatedAt; // 通知更新日時
+                rtn.push(message);
             });
-            return userInfo;
+            
+            return rtn;
         } catch (error) {
             throw error;
         }

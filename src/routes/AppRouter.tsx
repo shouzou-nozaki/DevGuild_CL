@@ -7,6 +7,7 @@ import MyProjects from "../pages/MyProjects";
 import CreateProject from "../pages/CreateProject";
 import JoiningProjects from "../pages/JoiningProjects";
 import Login from "../pages/Login";
+import { toast, ToastContainer } from "react-toastify";
 
 export const AppRouter = () => {
     return (

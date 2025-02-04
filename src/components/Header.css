@@ -46,6 +46,7 @@
 
 .header .nav-item {
     margin-left: 1rem;
+    position:relative
 }
 
 .header .nav-item a {
@@ -61,7 +62,9 @@
 .header .nav-item .project-list,
 .header .nav-item .create-project,
 .header .nav-item .edit-project,
-.header .nav-item .joining-project {
+.header .nav-item .joining-project,
+.header .notify-button
+{
   display: inline-block;
   margin: 5px;
   padding: 10px 15px;
@@ -105,6 +108,31 @@
   background-color: #ce8702;
 }
 
+/* 通知 */
+.header .nav-item .notify-button {
+  background-color: #333333;
+}
+.header .nav-item .notify-button:hover {
+  background-color: #18171733;
+}
+.header .nav-item .notify-number {
+  position: absolute;
+  top: -5px;
+  right: -5px;
+  background-color: red;
+  color: white;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 12px;
+  font-weight: bold;
+  z-index: 1;
+  pointer-events: none;
+}
+
 /* ログイン・ログアウト */
 .header .logout-button,
 .header .login-link {
@@ -117,3 +145,4 @@
     background-color: rgb(39, 39, 39);
     color: white;
 }
+
