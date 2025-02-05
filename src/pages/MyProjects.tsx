@@ -6,6 +6,7 @@ import { ProjectService } from "../services/ProjectService";
 import { ProjectInfo } from "../dto/ProjectInfo";
 import { Const } from "../util/Const";
 
+
 const MyProjects = () => {
     const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
     const { user } = useUser(); // ユーザー情報とセット関数を取得
@@ -60,7 +61,7 @@ const MyProjects = () => {
         // プロジェクト状態を反転させる
         if (projectInfo.Status === Const.STATUS_OPEN) {
             projectInfo.Status = Const.STATUS_CLOSE;
-        }else{
+        } else {
             projectInfo.Status = Const.STATUS_OPEN;
         }
         const service = new ProjectService;
@@ -103,6 +104,7 @@ const MyProjects = () => {
                                     </button>
                                 }
                             </td>
+
                         </tr>
                     ))}
                 </tbody>

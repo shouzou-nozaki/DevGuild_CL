@@ -14,6 +14,7 @@ body {
   width: 30%;
   max-width: 100%;
   margin: auto;
+  text-align: center;
 }
 
 .login-title {
@@ -53,8 +54,8 @@ input:focus {
 .discord-login-button {
   width: 100%;
   padding: 0.8rem;
-  background-color: #007bff;
   color: white;
+  background-color: #5865F2; /* Discordっぽい紫 */
   border: none;
   border-radius: 4px;
   font-size: 1rem;

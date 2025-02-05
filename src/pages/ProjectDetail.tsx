@@ -1,4 +1,8 @@
-import { classicNameResolver } from "typescript"
+import { DiscordService } from '../services/DiscordService';
+import { MessageService } from '../services/MessageService';
+import { ProjectService } from '../services/ProjectService';
+import { Const } from '../util/Const';
+import { useUser } from '../util/UserContext';
 import './ProjectDetail.css';
 import { useLocation, useNavigate } from 'react-router-dom';
 
@@ -8,8 +12,26 @@ function ProjectDetail() {
     const location = useLocation();
     const project = location.state?.project;
 
+    const { user } = useUser(); // ユーザー情報
+
     // 遷移用フック
     const navigate = useNavigate();
+
+    /**
+     * プロジェクト申請処理
+     */
+    const applyProject = () => {
+        if(!user || !user.name) {
+            alert("ユーザー情報が取得できませんでした。");
+            return;
+        }
+        const service = new DiscordService();
+        service.applyProject(user.name, project);
+        
+        const messageService = new MessageService();
+        messageService.sendMessage(user.name, project);
+        navigate("/", {state: {message: Const.MESSAGE_SEND_SUCCESS}});
+    }
 
     /**
      * プロジェクト一覧へ戻る
@@ -35,16 +57,10 @@ function ProjectDetail() {
             <div className="requirements">
                 <h2>参加条件:</h2>
                 <ul>
-                    {
-                        project.Requirements?.map((req: any) => {
-                            return (
-                                <li>{req}</li>
-                            );
-                        })
-                    }
+                    {project.Requirements?.map((request: string) => { return <li>{request}</li> })}
                 </ul>
             </div>
-            <a href="/apply.html" className="apply">参加申請</a>
+            <button className='apply-button' onClick={applyProject}>参加申請</button>
             {/* <!-- 戻るボタン --> */}
             <button className="back" onClick={Back}>戻る</button>
         </div>

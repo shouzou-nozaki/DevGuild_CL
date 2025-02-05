@@ -1,5 +1,5 @@
-// プロジェクト情報型クラス
-export class ProjectInfo{
+// プロジェクト情報型クラス TODO:小文字に変換 
+export class ProjectInfo{ 
     ProjectId : string = "";       // プロジェクトID
     UserId: String = "";           // ユーザーID
     DiscordServerId: string = "";  // DiscordサーバーID

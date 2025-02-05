@@ -26,12 +26,26 @@ function App() {
   // ページ切り替え処理
   const paginate = (pageNumber: React.SetStateAction<number>) => setCurrentPage(pageNumber);
 
-
-  // プロジェクトデータを取得
+  /**
+   * プロジェクト一覧取得処理
+   */
   useEffect(() => {
     fetchProjects();
   }, []);
 
+  const fetchProjects = async () => {
+    try {
+      const service = new ProjectService();
+      const response = await service.getAllProject();
+      setProjectList(response); // データを状態にセット
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  /**
+   * メッセージ表示処理
+   */
   useEffect(() => {
     // メッセージがある場合は5秒後に消す
     if (message) {
@@ -43,16 +57,6 @@ function App() {
       return () => clearTimeout(timer);
     }
   }, [message, navigate]);
-
-  const fetchProjects = async () => {
-    try {
-      const service = new ProjectService();
-      const response = await service.getAllProject();
-      setProjectList(response); // データを状態にセット
-    } catch (error) {
-      console.error(error);
-    }
-  };
 
   return (
     <div className="container">
@@ -114,19 +118,15 @@ function App() {
             key={pageNumber}
             className={`page_button ${pageNumber === currentPage ? 'active' : ''}`}
             onClick={() => paginate(pageNumber)}
-          >
-            {pageNumber}
+          >{pageNumber}
           </button>
         ))}
         <button
           onClick={() => paginate(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="page_button"
-        >
-          &gt;
+          className="page_button">&gt;
         </button>
       </nav>
-
     </div>
   );
 }

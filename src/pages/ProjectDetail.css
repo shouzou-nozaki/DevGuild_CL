@@ -59,7 +59,7 @@ h1 {
 }
 
 /* 参加申請ボタン */
-.container .apply {
+.container .apply-button {
     display: inline-block;
     padding: 10px 20px;
     font-size: 1em;
@@ -71,7 +71,7 @@ h1 {
     transition: background-color 0.3s ease;
 }
 
-.button:hover {
+.apply-button:hover {
     background-color: #0056b3;
 }
 

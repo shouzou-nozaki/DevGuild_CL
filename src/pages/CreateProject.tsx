@@ -183,8 +183,7 @@ const CreateProject = () => {
      */
     const inviteDiscordBotToServer = () => {
         const clientId = process.env.REACT_APP_DISCORD_CLIENT_ID;
-        const redirectUri = process.env.REACT_APP_DISCORD_ASSIGNMENT_URI; // リダイレクトURI
-        if (!clientId || !redirectUri) {
+        if (!clientId) {
             console.error("環境変数が不足しています");
             return;
         }
