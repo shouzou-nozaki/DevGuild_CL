@@ -1,15 +1,14 @@
 import React, { createContext, useContext, useState, ReactNode, useEffect } from "react";
 
-// ユーザー情報の型定義
 interface User {
     id:string;
     name: string;
+    token: string;
 }
 
-// Contextの型定義
 interface UserContextType {
-    user: User | null; // ログインしていない場合は null
-    setUser: (user: User | null) => void; // ユーザー情報をセットする関数
+    user: User | null;
+    setUser: (user: User | null) => void;
 }
 
 // Contextの初期値（未定義のため型にnullを許容）

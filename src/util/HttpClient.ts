@@ -6,19 +6,22 @@ export type Perform = string;
 export class HttpClient {
     private baseURL: string; // インスタンスごとに異なるURLを設定可能
 
-    constructor(baseURL: string = "http://localhost:8080") {
+    constructor(baseURL: string = process.env.REACT_APP_BACKEND_URL ?? "") {
         this.baseURL = baseURL;
     }
 
     /**
-     * API コール処理
+     * API通信処理(POSTメソッド)
      * @param param API に渡すパラメータ
      * @param perform エンドポイント (Perform型)
      * @returns APIからのレスポンス
      */
-    public async callApi(param: any, perform: Perform): Promise<Response> {
-        const url = `${this.baseURL}${perform}`;
+    public async postApi(param: any, perform: Perform): Promise<Response> {
         try {
+            if (this.baseURL === "") throw new Error("バックエンドURLが設定されていません");
+
+            // API通信
+            const url = `${this.baseURL}${perform}`;
             const response = await fetch(url, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -27,13 +30,11 @@ export class HttpClient {
             });
 
             if (!response.ok) {
-                // カスタマイズされたエラーハンドリング
                 throw new Error(`API Error: ${response.status} ${response.statusText}`);
             }
 
             return response;
         } catch (error) {
-            console.error(`HTTP通信エラー: ${error}`);
             throw error; // 必要に応じてエラーを再スロー
         }
     }

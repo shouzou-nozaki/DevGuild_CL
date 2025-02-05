@@ -7,7 +7,6 @@ import MyProjects from "../pages/MyProjects";
 import CreateProject from "../pages/CreateProject";
 import JoiningProjects from "../pages/JoiningProjects";
 import Login from "../pages/Login";
-import Header from "../components/Header";
 
 export const AppRouter = () => {
     return (

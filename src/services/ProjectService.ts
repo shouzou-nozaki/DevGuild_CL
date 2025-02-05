@@ -14,6 +14,7 @@ export type ProjectPerform = (typeof ProjectPerform)[keyof typeof ProjectPerform
 
 /**
  * プロジェクト情報用サービスクラス
+ * TODO：それぞれでtry-catchが冗長なので見直し
  */
 export class ProjectService {
     private client: HttpClient;
@@ -23,28 +24,50 @@ export class ProjectService {
     }
 
     public async getAllProject(): Promise<Array<ProjectInfo>> {
-        const response = await this.client.callApi(null, ProjectPerform.SEARCH);
-        let projectInfo = ResponseConv.ToProjectInfo(response);
+        try {
+            const response = await this.client.postApi(null, ProjectPerform.SEARCH);
+            let projectInfo = ResponseConv.toProjectInfo(response);
 
-        return projectInfo;
+            return projectInfo;
+        } catch (error) {
+            throw error;
+        }
+
     }
-    
+
     public async getMyProjects(userid: string): Promise<Array<ProjectInfo>> {
-        const response = await this.client.callApi(userid.toString(), ProjectPerform.MYPROJECT);
-        let fetchedProjects = ResponseConv.ToProjectInfo(response);
-        return fetchedProjects;
+        try {
+            const response = await this.client.postApi(userid.toString(), ProjectPerform.MYPROJECT);
+            let fetchedProjects = ResponseConv.toProjectInfo(response);
+            return fetchedProjects;
+        } catch (error) {
+            throw error;
+        }
+
     }
 
-    public async regProject(projectInfo: ProjectInfo): Promise<void> {
-        this.client.callApi(projectInfo, ProjectPerform.CREATE);
+    public async regProject(param:any): Promise<void> {
+        try {
+            this.client.postApi(param, ProjectPerform.CREATE);
+        } catch (error) {
+            throw error;
+        }
     }
 
     public async updateProject(projectInfo: ProjectInfo): Promise<void> {
-        this.client.callApi(projectInfo, ProjectPerform.UPDATE);
+        try {
+            this.client.postApi(projectInfo, ProjectPerform.UPDATE);
+        } catch (error) {
+            throw error;
+        }
     }
 
     public async deleteProject(projectId: string): Promise<void> {
-        this.client.callApi(projectId, ProjectPerform.DELETE);
+        try {
+            this.client.postApi(projectId, ProjectPerform.DELETE);
+        } catch (error) {
+            throw error;
+        }
     }
 
 
