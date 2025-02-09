@@ -50,6 +50,7 @@ export class ResponseConv {
                 const message = new Message();
                 message.id = data.id;               // ID
                 message.userId = data.userId;       // 通知を受け取るユーザーのID
+                message.projectId = data.projectId; // プロジェクトID
                 message.message = data.message;     // 通知の詳細メッセージ
                 message.isRead = data.isRead;       // 既読状態
                 message.createdAt = data.createdAt; // 通知作成日時

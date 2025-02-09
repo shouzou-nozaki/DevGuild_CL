@@ -36,6 +36,11 @@
     background-color: #f9f9f9;
 }
 
+.notification-list .create-time {
+    font-size: 0.8rem;
+    color: #666;
+    margin:none;
+}
 .notification-list .permit-button {
     color: white;
     background-color: #28a745;
@@ -53,7 +58,7 @@
 
 .notification-list .deny-button  {
     color: white;
-    background-color: #dc3545; /* 鮮やかな赤 */
+    background-color: #dc3545;
     padding: 5px 10px;
     text-decoration: none;
     border-radius: 4px;
@@ -63,5 +68,5 @@
     float: right;
 }
 .notification-list .deny-button :hover {
-    background-color: #c82333; /* 濃い赤でホバー時を目立たせる */
+    background-color: #c82333;
 }

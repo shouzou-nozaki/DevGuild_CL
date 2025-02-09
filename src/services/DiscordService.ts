@@ -4,6 +4,7 @@ import { ResponseConv } from "../util/ResponseConv";
 
 export const DiscordPerform = {
     APPLY: "/api/auth/apply",
+    INVITE: "/api/auth/invite"
 } as const;
 
 export type ProjectPerform = (typeof DiscordPerform)[keyof typeof DiscordPerform];
@@ -27,6 +28,19 @@ export class DiscordService {
     public async applyProject(applyUserName: string, applyProjectInfo: ProjectInfo): Promise<void> {
         try {
             this.client.postApi({ applyUserName, applyProjectInfo }, DiscordPerform.APPLY);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * プロジェクト招待処理
+     * @param inviteUser 招待するユーザーID
+     * @param projectId プロジェクトID
+     */
+    public async inviteProject(inviteUser:string, projectId: string): Promise<void> {
+        try {
+            this.client.getApi({inviteUser:inviteUser, projectId:projectId}, DiscordPerform.INVITE);
         } catch (error) {
             throw error;
         }
