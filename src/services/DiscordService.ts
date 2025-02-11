@@ -4,14 +4,14 @@ import { ResponseConv } from "../util/ResponseConv";
 
 export const DiscordPerform = {
     APPLY: "/api/auth/apply",
-    INVITE: "/api/auth/invite"
+    INVITE: "/api/auth/invite",
+    REJECT: "/api/auth/reject",
 } as const;
 
-export type ProjectPerform = (typeof DiscordPerform)[keyof typeof DiscordPerform];
+export type DiscordPerform = (typeof DiscordPerform)[keyof typeof DiscordPerform];
 
 /**
  * プロジェクト情報用サービスクラス
- * TODO：それぞれでtry-catchが冗長なので見直し
  */
 export class DiscordService {
     private client: HttpClient;
@@ -38,14 +38,26 @@ export class DiscordService {
      * @param inviteUser 招待するユーザーID
      * @param projectId プロジェクトID
      */
-    public async inviteProject(inviteUser:string, projectId: string): Promise<void> {
+    public async inviteProject(inviteUserId:string, projectId: string): Promise<void> {
         try {
-            this.client.getApi({inviteUser:inviteUser, projectId:projectId}, DiscordPerform.INVITE);
+            this.client.getApi({inviteUserId:inviteUserId, projectId:projectId}, DiscordPerform.INVITE);
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    /**
+     * プロジェクト参加拒否処理
+     * @param inviteUser 拒否するユーザーID
+     * @param projectId プロジェクトID
+     */
+    public async rejectProject(rejectUserId:string, projectId: string): Promise<void> {
+        try {
+            this.client.getApi({rejectUserId:rejectUserId, projectId:projectId}, DiscordPerform.REJECT);
         } catch (error) {
             throw error;
         }
     }
 
 }
-
 

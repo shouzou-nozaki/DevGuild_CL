@@ -17,16 +17,27 @@ const NotificationList: React.FC<MessageInfoPros> = ({ message }) => {
         setMessageList(message);
     }, [message]);
 
-    // プロジェクトへの参加許可処理
-    const permitJoin = (projecetId:string) => {
-        if(!user || !user.id) return;
+    /**
+     * 許可ボタン押下処理
+     * プロジェクト参加許可処理
+     * @param projecetId 
+     * @returns 
+     */
+    const permitToJoin = (projecetId: string) => {
+        if (!user || !user.id || projecetId == "") return;
         // プロジェクトへ招待
         service.inviteProject(user.id, projecetId);
     };
 
-    // プロジェクトへの参加拒否処理
-    const denyJoin = (projecetId:string) => {
-        // 拒否処理を実装
+    /**
+     * 拒否ボタン押下処理
+     * プロジェクト参加拒否処理
+     * @param projecetId 
+     */
+    const rejectToJoin = (projecetId: string) => {
+        if (!user || !user.id || projecetId == "") return;
+        // プロジェクトへの参加拒否
+        service.rejectProject(user.id, projecetId);
     };
 
     return (
@@ -37,8 +48,8 @@ const NotificationList: React.FC<MessageInfoPros> = ({ message }) => {
                     <li key={message.id}>
                         <div className="create-time">{message.createdAt}</div>
                         {message.message}
-                        <button className="permit-button" onClick={() => permitJoin(message.projectId)}>許可</button>
-                        <button className="deny-button" onClick={() => denyJoin(message.projectId)}>拒否</button>
+                        <button className="permit-button" onClick={() => permitToJoin(message.projectId)}>許可</button>
+                        <button className="reject-button" onClick={() => rejectToJoin(message.projectId)}>拒否</button>
                     </li>
                 ))}
             </ul>

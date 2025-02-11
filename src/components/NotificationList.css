@@ -41,6 +41,7 @@
     color: #666;
     margin:none;
 }
+
 .notification-list .permit-button {
     color: white;
     background-color: #28a745;
@@ -56,7 +57,7 @@
     background-color: #228d3b;
 }
 
-.notification-list .deny-button  {
+.notification-list .reject-button  {
     color: white;
     background-color: #dc3545;
     padding: 5px 10px;
@@ -67,6 +68,6 @@
     font-weight: bold;
     float: right;
 }
-.notification-list .deny-button :hover {
+.notification-list .reject-button :hover {
     background-color: #c82333;
 }
