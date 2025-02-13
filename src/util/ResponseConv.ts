@@ -48,12 +48,11 @@ export class ResponseConv {
 
             responseData.forEach((data: any) => {
                 const message = new Message();
-                message.id = data.id;               // ID
+                message.messageId = data.messageId; // ID
                 message.userId = data.userId;       // 通知を受け取るユーザーのID
+                message.projectId = data.projectId; // プロジェクトID
                 message.message = data.message;     // 通知の詳細メッセージ
-                message.isRead = data.isRead;       // 既読状態
                 message.createdAt = data.createdAt; // 通知作成日時
-                message.updatedAt = data.updatedAt; // 通知更新日時
                 rtn.push(message);
             });
             
