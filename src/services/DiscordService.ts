@@ -1,3 +1,5 @@
+
+import { Message } from "../dto/Message";
 import { ProjectInfo } from "../dto/ProjectInfo";
 import { HttpClient, Perform } from "../util/HttpClient";
 import { ResponseConv } from "../util/ResponseConv";
@@ -38,9 +40,9 @@ export class DiscordService {
      * @param inviteUser 招待するユーザーID
      * @param projectId プロジェクトID
      */
-    public async inviteProject(inviteUserId:string, projectId: string): Promise<void> {
+    public async inviteProject(inviteUserId:string, message:Message): Promise<void> {
         try {
-            this.client.getApi({inviteUserId:inviteUserId, projectId:projectId}, DiscordPerform.INVITE);
+            this.client.getApi({inviteUserId:inviteUserId, messageId:message.messageId, projectId:message.projectId}, DiscordPerform.INVITE);
         } catch (error) {
             throw error;
         }
@@ -51,9 +53,9 @@ export class DiscordService {
      * @param inviteUser 拒否するユーザーID
      * @param projectId プロジェクトID
      */
-    public async rejectProject(rejectUserId:string, projectId: string): Promise<void> {
+    public async rejectProject(rejectUserId:string, message:Message): Promise<void> {
         try {
-            this.client.getApi({rejectUserId:rejectUserId, projectId:projectId}, DiscordPerform.REJECT);
+            this.client.getApi({rejectUserId:rejectUserId,messageId:message.messageId, projectId:message.projectId}, DiscordPerform.REJECT);
         } catch (error) {
             throw error;
         }
