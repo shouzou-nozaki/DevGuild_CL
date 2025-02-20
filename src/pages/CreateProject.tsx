@@ -65,7 +65,7 @@ const CreateProject = () => {
             // データ登録
             const service = new ProjectService();
             if (mode == Const.MODE_CREATE_PROJECT) {
-                const param = { projectInfo: projectInfoForService, accessToken: user?.token.toString() }
+                const param = { projectInfo: projectInfoForService}
                 service.regProject(param);
             } else if (mode == Const.MODE_UPDATE_PROJECT) {
                 service.updateProject(projectInfoForService);

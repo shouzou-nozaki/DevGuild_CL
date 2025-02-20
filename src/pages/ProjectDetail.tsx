@@ -21,7 +21,7 @@ function ProjectDetail() {
      * プロジェクト申請処理
      */
     const applyProject = () => {
-        if(!user || !user.name) {
+        if(!user || user.name === "") {
             alert("ユーザー情報が取得できませんでした。");
             return;
         }
@@ -29,7 +29,8 @@ function ProjectDetail() {
         service.applyProject(user.name, project);
         
         const messageService = new MessageService();
-        messageService.sendMessage(user.name, project);
+        messageService.sendMessage(user, project);
+
         navigate("/", {state: {message: Const.MESSAGE_SEND_SUCCESS}});
     }
 
