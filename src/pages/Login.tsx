@@ -28,7 +28,7 @@ const Login = () => {
     const discordAuthUrl = `https://discord.com/api/oauth2/authorize?&client_id=${clientId}&response_type=${responseType}&redirect_uri=${encodeURIComponent(
       redirectUri
     )}&scope=${scope}`;
-    window.open(discordAuthUrl);
+    window.open(discordAuthUrl, '_self');
   };
 
   useEffect(() => {

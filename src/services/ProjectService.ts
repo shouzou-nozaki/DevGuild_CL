@@ -9,13 +9,14 @@ export const ProjectPerform = {
     DELETE: "/project/delete",
     MYPROJECT: "/project/myproject",
     APPLY: "/project/apply",
+    JOINING: "/project/joining",
+    LEAVE: "/project/leave",
 } as const;
 
 export type ProjectPerform = (typeof ProjectPerform)[keyof typeof ProjectPerform];
 
 /**
  * プロジェクト情報用サービスクラス
- * TODO：それぞれでtry-catchが冗長なので見直し
  */
 export class ProjectService {
     private client: HttpClient;
@@ -24,9 +25,9 @@ export class ProjectService {
         this.client = new HttpClient(baseURL);
     }
 
-    public async getAllProject(): Promise<Array<ProjectInfo>> {
+    public async getAllProject(userId:string): Promise<Array<ProjectInfo>> {
         try {
-            const response = await this.client.postApi(null, ProjectPerform.SEARCH);
+            const response = await this.client.postApi(userId, ProjectPerform.SEARCH);
             let projectInfo = ResponseConv.toProjectInfo(response);
 
             return projectInfo;
@@ -41,6 +42,18 @@ export class ProjectService {
             const response = await this.client.postApi(userid.toString(), ProjectPerform.MYPROJECT);
             let fetchedProjects = ResponseConv.toProjectInfo(response);
             return fetchedProjects;
+        } catch (error) {
+            alert("プロジェクト情報の取得に失敗しました。");
+            return [];
+        }
+    }
+
+    public async getJoiningProjects(userId:string): Promise<Array<ProjectInfo>> {
+        try {
+            const response = await this.client.getApi({userId:userId}, ProjectPerform.JOINING);
+            let projectInfo = ResponseConv.toProjectInfo(response);
+
+            return projectInfo;
         } catch (error) {
             alert("プロジェクト情報の取得に失敗しました。");
             return [];
@@ -71,7 +84,13 @@ export class ProjectService {
         }
     }
 
-
+    public async leaveProject(userId:string, projectId:string): Promise<void> {
+        try {
+            this.client.getApi({userId:userId, projectId:projectId}, ProjectPerform.LEAVE);
+        } catch (error) {
+            alert("プロジェクトからの抜けるに失敗しました。");
+        }
+    }
 
 }
 

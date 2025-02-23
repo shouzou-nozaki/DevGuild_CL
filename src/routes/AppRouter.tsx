@@ -23,7 +23,7 @@ export const AppRouter = () => {
             {/* マイプロジェクト一覧 */}
             <Route path="/myprojects" element={<MyProjects />} />
             {/* 参画プロジェクト一覧 */}
-            <Route path="/joinning" element={<JoiningProjects/>}/>
+            <Route path="/joining" element={<JoiningProjects/>}/>
         </Routes>
     )
 }

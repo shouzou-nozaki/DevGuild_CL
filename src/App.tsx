@@ -3,11 +3,13 @@ import { Link, useLocation, useNavigate } from 'react-router-dom';
 import './App.css';
 import { ProjectService } from './services/ProjectService';
 import { ProjectInfo } from './dto/ProjectInfo';
+import { useUser } from './util/UserContext';
 
 /**
  * プロジェクト一覧画面
  */
 function App() {
+  const { user } = useUser(); // ユーザー情報
   const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
   const [currentPage, setCurrentPage] = useState(1); // 現在のページ
   const itemsPerPage = 10; // 1ページあたりの表示件数
@@ -26,18 +28,19 @@ function App() {
   // ページ切り替え処理
   const paginate = (pageNumber: React.SetStateAction<number>) => setCurrentPage(pageNumber);
 
-  /**
-   * プロジェクト一覧取得処理
-   */
   useEffect(() => {
+    // プロジェクト一覧の取得
     fetchProjects();
-  }, []);
+  }, [user]);
 
   const fetchProjects = async () => {
     try {
+      // プロジェクト一覧の取得
       const service = new ProjectService();
-      const response = await service.getAllProject();
-      setProjectList(response); // データを状態にセット
+      const response = await service.getAllProject(user?.id ?? "");
+
+      // 取得したプロジェクト一覧をセット
+      setProjectList(response);
     } catch (error) {
       console.error(error);
     }

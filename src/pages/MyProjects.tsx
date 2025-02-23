@@ -64,6 +64,7 @@ const MyProjects = () => {
         } else {
             projectInfo.Status = Const.STATUS_OPEN;
         }
+        // プロジェクト情報を更新
         const service = new ProjectService;
         service.updateProject(projectInfo);
 
