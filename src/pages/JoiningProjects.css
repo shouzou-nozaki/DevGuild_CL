@@ -1,0 +1,43 @@
+.container {
+    padding: 20px;
+    background: #f5f5f5;
+}
+
+.project-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.project-item {
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.project-info h3 {
+    margin: 0 0 5px;
+}
+
+.leave-button {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 8px 12px;
+    cursor: pointer;
+}
+
+.leave-button:hover {
+    background-color: #c82333;
+}
+
+:disabled {
+    opacity:50%;
+    cursor: none;
+}

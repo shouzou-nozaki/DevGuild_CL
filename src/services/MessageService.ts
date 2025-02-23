@@ -25,9 +25,9 @@ export class MessageService {
      * @param projectId プロジェクトID
      * @param userId ユーザーID
      */
-    public async sendMessage(applyUserName: string, applyProjectInfo: ProjectInfo): Promise<Response> {
+    public async sendMessage(applyUser: any, applyProjectInfo: ProjectInfo): Promise<Response> {
         try {
-            return this.client.postApi({ applyUserName, applyProjectInfo }, MessagePerform.SEND);
+            return this.client.postApi({ applyUser, applyProjectInfo }, MessagePerform.SEND);
         } catch (error) {
             console.error(error);
             alert("メッセージ送信に失敗しました。");

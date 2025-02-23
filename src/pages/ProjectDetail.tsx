@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { DiscordService } from '../services/DiscordService';
 import { MessageService } from '../services/MessageService';
 import { ProjectService } from '../services/ProjectService';
@@ -11,7 +12,7 @@ function ProjectDetail() {
     // 一覧画面からのプロジェクト情報取得
     const location = useLocation();
     const project = location.state?.project;
-
+    const [isProcessing, setIsProcessing] = useState(false);
     const { user } = useUser(); // ユーザー情報
 
     // 遷移用フック
@@ -21,16 +22,21 @@ function ProjectDetail() {
      * プロジェクト申請処理
      */
     const applyProject = () => {
-        if(!user || !user.name) {
+        if(!user || user.name === "") {
             alert("ユーザー情報が取得できませんでした。");
             return;
         }
+
+        if (isProcessing) return; // 処理中であれば、処理を抜ける
+        // 処理中フラグをON
+        setIsProcessing(true);
+
         const service = new DiscordService();
-        service.applyProject(user.name, project);
-        
-        const messageService = new MessageService();
-        messageService.sendMessage(user.name, project);
-        navigate("/", {state: {message: Const.MESSAGE_SEND_SUCCESS}});
+        service.applyProject(user, project);
+
+        setTimeout(() => {
+            navigate("/", {state: {message: Const.MESSAGE_SEND_SUCCESS}});
+        }, 1500);
     }
 
     /**
@@ -60,7 +66,9 @@ function ProjectDetail() {
                     {project.Requirements?.map((request: string) => { return <li>{request}</li> })}
                 </ul>
             </div>
-            <button className='apply-button' onClick={applyProject}>参加申請</button>
+            <button className='apply-button' onClick={applyProject}
+                disabled={isProcessing}
+            >参加申請</button>
             {/* <!-- 戻るボタン --> */}
             <button className="back" onClick={Back}>戻る</button>
         </div>

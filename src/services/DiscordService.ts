@@ -2,7 +2,6 @@
 import { Message } from "../dto/Message";
 import { ProjectInfo } from "../dto/ProjectInfo";
 import { HttpClient, Perform } from "../util/HttpClient";
-import { ResponseConv } from "../util/ResponseConv";
 
 export const DiscordPerform = {
     APPLY: "/api/auth/apply",
@@ -27,9 +26,9 @@ export class DiscordService {
      * @param projectId プロジェクトID
      * @param userId ユーザーID
      */
-    public async applyProject(applyUserName: string, applyProjectInfo: ProjectInfo): Promise<void> {
+    public async applyProject(applyUser: any, applyProjectInfo: ProjectInfo): Promise<void> {
         try {
-            this.client.postApi({ applyUserName, applyProjectInfo }, DiscordPerform.APPLY);
+            this.client.postApi({ applyUser, applyProjectInfo }, DiscordPerform.APPLY);
         } catch (error) {
             throw error;
         }
