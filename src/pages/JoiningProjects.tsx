@@ -9,9 +9,10 @@ const JoiningProjects = () => {
     const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
     const navigate = useNavigate();
     const { user } = useUser(); // ユーザー情報とセット関数を取得
+    const [isProcessing, setIsProcessing] = useState(false);
     const projectService = new ProjectService();
 
-    // コンポーネントマウント時に参画プロジェクト一覧を取得（ここではサンプルデータ）
+    // コンポーネントマウント時に参画プロジェクト一覧を取得
     useEffect(() => {
         if (user && user.id) {
             fetchProjects();
@@ -33,11 +34,22 @@ const JoiningProjects = () => {
 
     // プロジェクトから抜ける処理（実際のAPI呼び出しに置き換え可能）
     const leaveProject = async (projectId: string) => {
+
+        if (isProcessing) return; // 処理中であれば、処理を抜ける
+        // 処理中フラグをON
+        setIsProcessing(true);
+
+        // プロジェクト脱退処理
         if (user === null || user.id === "") return;
-        // プロジェクトから抜ける処理
         await projectService.leaveProject(user.id, projectId);
-        alert("プロジェクトから抜けました。");
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+
+        // 処理中フラグをOFF
+        // setIsProcessing(false);
     };
+
 
     return (
         <div className="container">
@@ -55,6 +67,7 @@ const JoiningProjects = () => {
                             <button
                                 className="leave-button"
                                 onClick={() => leaveProject(project.ProjectId)}
+                                disabled={isProcessing}
                             >
                                 プロジェクトから抜ける
                             </button>

@@ -25,9 +25,9 @@ export class ProjectService {
         this.client = new HttpClient(baseURL);
     }
 
-    public async getAllProject(): Promise<Array<ProjectInfo>> {
+    public async getAllProject(userId:string): Promise<Array<ProjectInfo>> {
         try {
-            const response = await this.client.postApi(null, ProjectPerform.SEARCH);
+            const response = await this.client.postApi(userId, ProjectPerform.SEARCH);
             let projectInfo = ResponseConv.toProjectInfo(response);
 
             return projectInfo;

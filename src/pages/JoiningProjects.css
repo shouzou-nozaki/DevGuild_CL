@@ -36,3 +36,8 @@
 .leave-button:hover {
     background-color: #c82333;
 }
+
+:disabled {
+    opacity:50%;
+    cursor: none;
+}
