@@ -63,7 +63,7 @@ const Header = () => {
         if (eventSourceRef.current) return;
 
         // EventSource のインスタンスがまだない場合のみ作成
-        eventSourceRef.current = new EventSource("https://devguild-sv.onrender.com/notifications/stream");
+        eventSourceRef.current = new EventSource("https://dev-guild.onrender.com/notifications/stream");
 
         // 通知表示
         eventSourceRef.current.onmessage = (event) => {
