@@ -31,36 +31,7 @@ const Login = () => {
     window.open(discordAuthUrl, '_self');
   };
 
-  useEffect(() => {
-    // URLパラメータからDiscordユーザー情報を取得
-    const urlParams = new URLSearchParams(window.location.search);
-    const username = urlParams.get("username"); // ユーザー名
-    const userId = urlParams.get("userId");     // ユーザーID
-    const accessToken = urlParams.get("accessToken"); // アクセストークン
-
-    if (!username || !userId || !accessToken) return;
-
-    // Discordユーザー情報をキャッシュに保存
-    cacheDiscordUser(username, userId, accessToken);
-
-    navigate("/");
-  }, [navigate]);
-
-  /**
-   * Discordユーザー情報をキャッシュに保存
-   * @param username Discordユーザー名
-   * @param userId DiscordユーザーID
-   */
-  const cacheDiscordUser = (username: string, userId: string, accessToken: string) => {
-    // ログイン情報をキャッシュに保存
-    const userCache = {
-      id: userId,
-      name: username,
-      token: accessToken,
-    };
-    localStorage.setItem("userInfo", JSON.stringify(userCache));
-    setUser(userCache);
-  }
+  
 
   return (
     <div className="login-container">

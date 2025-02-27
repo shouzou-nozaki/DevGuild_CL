@@ -9,7 +9,7 @@ import { useUser } from './util/UserContext';
  * プロジェクト一覧画面
  */
 function App() {
-  const { user } = useUser(); // ユーザー情報
+  const { user, setUser } = useUser(); // ユーザー情報
   const [projectList, setProjectList] = useState<Array<ProjectInfo>>([]); // プロジェクトリストの状態
   const [currentPage, setCurrentPage] = useState(1); // 現在のページ
   const itemsPerPage = 10; // 1ページあたりの表示件数
@@ -27,6 +27,37 @@ function App() {
 
   // ページ切り替え処理
   const paginate = (pageNumber: React.SetStateAction<number>) => setCurrentPage(pageNumber);
+
+  useEffect(() => {
+    // URLパラメータからDiscordユーザー情報を取得
+    const urlParams = new URLSearchParams(window.location.search);
+    const username = urlParams.get("username"); // ユーザー名
+    const userId = urlParams.get("userId");     // ユーザーID
+    const accessToken = urlParams.get("accessToken"); // アクセストークン
+
+    if (!username || !userId || !accessToken) return;
+
+    // Discordユーザー情報をキャッシュに保存
+    cacheDiscordUser(username, userId, accessToken);
+
+    navigate("/");
+  }, [navigate]);
+
+  /**
+   * Discordユーザー情報をキャッシュに保存
+   * @param username Discordユーザー名
+   * @param userId DiscordユーザーID
+   */
+  const cacheDiscordUser = (username: string, userId: string, accessToken: string) => {
+    // ログイン情報をキャッシュに保存
+    const userCache = {
+      id: userId,
+      name: username,
+      token: accessToken,
+    };
+    localStorage.setItem("userInfo", JSON.stringify(userCache));
+    setUser(userCache);
+  }
 
   useEffect(() => {
     // プロジェクト一覧の取得
