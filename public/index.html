@@ -26,10 +26,13 @@
     -->
     <title>Dev.Guild</title>
 
-    <!-- リロード時のバックエンド転送 -->
     <script>
       (function() {
-        if (window.location.hostname === "devguild-cl.onrender.com") {
+        const isFrontendHost = window.location.hostname === "devguild-cl.onrender.com";
+        const hasRedirected = localStorage.getItem("hasRedirected");
+    
+        if (isFrontendHost && !hasRedirected) {
+          localStorage.setItem("hasRedirected", "true");
           const newUrl = "https://dev-guild.onrender.com" + window.location.pathname;
           window.location.replace(newUrl);
         }
