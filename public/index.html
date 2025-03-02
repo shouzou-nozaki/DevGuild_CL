@@ -35,12 +35,12 @@
     
         if (currentHost === frontendHost) {
           // フロントエンドURLでリロードされた場合、バックエンドへリダイレクト
-          const newUrl = backendHost + window.location.pathname + window.location.search;
+          const newUrl = backendHost + window.location.pathname;
           window.location.replace(newUrl);
         } 
         else if (currentHost === backendHost) {
           // バックエンドURLに来たら、フロントエンドに戻す
-          const newUrl = frontendHost + window.location.pathname + window.location.search;
+          const newUrl = frontendHost + window.location.pathname;
           window.location.replace(newUrl);
         }
       })();
