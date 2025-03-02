@@ -27,38 +27,42 @@
     <title>Dev.Guild</title>
 
     <script>
-  (function() {
-    const backendHost = "https://dev-guild.onrender.com";
-    const frontendHost = "https://devguild-cl.onrender.com";
-    const currentHost = window.location.origin;
-
-    function setCookie(name, value, minutes) {
-      const d = new Date();
-      d.setTime(d.getTime() + (minutes * 60 * 1000));
-      document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/`;
-    }
-
-    function getCookie(name) {
-      const cookies = document.cookie.split('; ');
-      for (const cookie of cookies) {
-        const [key, value] = cookie.split('=');
-        if (key === name) return value;
-      }
-      return null;
-    }
-
-    if (currentHost === frontendHost) {
-      console.log("Redirecting to backend...");
-      setCookie("redirectedFromFrontend", "true", 1); // 1分間だけ有効なCookie
-      window.location.replace(backendHost + window.location.pathname);
-    } 
-    else if (currentHost === backendHost && getCookie("redirectedFromFrontend")) {
-      console.log("Redirecting back to frontend...");
-      document.cookie = "redirectedFromFrontend=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;"; // Cookieを削除
-      window.location.replace(frontendHost + window.location.pathname);
-    }
-  })();
-</script>
+      document.addEventListener("DOMContentLoaded", function() {
+        console.log("スクリプト実行開始");  // ← これが出るかチェック！
+        
+        const backendHost = "https://dev-guild.onrender.com";
+        const frontendHost = "https://devguild-cl.onrender.com";
+        const currentHost = window.location.origin;
+    
+        function setCookie(name, value, minutes) {
+          const d = new Date();
+          d.setTime(d.getTime() + (minutes * 60 * 1000));
+          document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/`;
+          console.log(`Cookie 設定: ${name}=${value}`);  // ← これが出るかチェック！
+        }
+    
+        function getCookie(name) {
+          const cookies = document.cookie.split('; ');
+          for (const cookie of cookies) {
+            const [key, value] = cookie.split('=');
+            if (key === name) return value;
+          }
+          return null;
+        }
+    
+        if (currentHost === frontendHost) {
+          console.log("フロントエンドURLでリロードされた！ バックエンドにリダイレクト");
+          setCookie("redirectedFromFrontend", "true", 1);
+          window.location.replace(backendHost + window.location.pathname);
+        } 
+        else if (currentHost === backendHost && getCookie("redirectedFromFrontend")) {
+          console.log("バックエンドURLに来た！ フロントエンドに戻す");
+          document.cookie = "redirectedFromFrontend=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+          window.location.replace(frontendHost + window.location.pathname);
+        }
+      });
+    </script>
+    
 
   </head>
   <body>
