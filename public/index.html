@@ -28,15 +28,19 @@
     
     <script>
       (function() {
-        const isFrontendHost = window.location.hostname === "devguild-cl.onrender.com";
-        const isAlreadyRedirected = window.location.search.includes("redirected=true");
-
-        if (isFrontendHost && !isAlreadyRedirected) {
-          const newUrl = "https://dev-guild.onrender.com" + window.location.pathname;
-          window.location.replace(newUrl);
+        const backendHost = "https://dev-guild.onrender.com";
+        const frontendHost = "https://devguild-cl.onrender.com";
+        const currentHost = window.location.origin;
+        const redirected = new URLSearchParams(window.location.search).get("redirected");
+    
+        if (currentHost === backendHost && !redirected) {
+          // バックエンドのURLの場合、フロントエンドにリダイレクト
+          const newUrl = frontendHost + window.location.pathname + window.location.search;
+          window.location.replace(newUrl + (newUrl.includes('?') ? '&' : '?') + "redirected=true");
         }
       })();
     </script>
+    
 
   </head>
   <body>
