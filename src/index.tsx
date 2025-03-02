@@ -13,12 +13,9 @@ import { ToastContainer } from 'react-toastify';
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
-
-const backendBaseUrl = "https://dev-guild.onrender.com"; // バックエンドのURL
-
 root.render(
   <React.StrictMode>
-    <BrowserRouter basename={backendBaseUrl}>
+    <BrowserRouter>
       <UserProvider>
         <Header />
         <AppRouter />
