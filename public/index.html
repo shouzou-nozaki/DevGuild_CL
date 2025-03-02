@@ -31,20 +31,22 @@
         const backendHost = "https://dev-guild.onrender.com";
         const frontendHost = "https://devguild-cl.onrender.com";
         const currentHost = window.location.origin;
+        
+        console.log("Current Host:", currentHost);
+        console.log("SessionStorage:", sessionStorage.getItem("redirectedFromFrontend"));
     
         if (currentHost === frontendHost) {
-          // フロントエンドURLでリロードされた場合、バックエンドへリダイレクト
+          console.log("Redirecting to backend...");
           sessionStorage.setItem("redirectedFromFrontend", "true");
           window.location.replace(backendHost + window.location.pathname);
         } 
         else if (currentHost === backendHost && sessionStorage.getItem("redirectedFromFrontend")) {
-          // バックエンドからフロントエンドに戻す
+          console.log("Redirecting back to frontend...");
           sessionStorage.removeItem("redirectedFromFrontend");
           window.location.replace(frontendHost + window.location.pathname);
         }
       })();
     </script>
-    
 
   </head>
   <body>
