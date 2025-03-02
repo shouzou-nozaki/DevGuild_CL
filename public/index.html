@@ -33,6 +33,8 @@
         const backendHost = "https://dev-guild.onrender.com";
         const frontendHost = "https://devguild-cl.onrender.com";
         const currentHost = window.location.origin;
+
+        if(window.location.href == frontendHost) return;
     
         function setCookie(name, value, minutes) {
           const d = new Date();
