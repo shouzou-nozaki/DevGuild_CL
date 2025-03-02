@@ -30,6 +30,8 @@
         const isFrontendHost = window.location.hostname === "devguild-cl.onrender.com";
         const isAlreadyRedirected = window.location.search.includes("redirected=true");
     
+        if(window.location.pathname === "/") return;
+
         if (isFrontendHost && !isAlreadyRedirected) {
           const newUrl = "https://dev-guild.onrender.com" + window.location.pathname;
           window.location.replace(newUrl);
