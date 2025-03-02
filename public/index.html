@@ -35,12 +35,12 @@
         if (currentHost === frontendHost) {
           // フロントエンドURLでリロードされた場合、バックエンドへリダイレクト
           sessionStorage.setItem("redirectedFromFrontend", "true");
-          window.location.replace(backendHost + window.location.pathname + window.location.search);
+          window.location.replace(backendHost + window.location.pathname);
         } 
         else if (currentHost === backendHost && sessionStorage.getItem("redirectedFromFrontend")) {
           // バックエンドからフロントエンドに戻す
           sessionStorage.removeItem("redirectedFromFrontend");
-          window.location.replace(frontendHost + window.location.pathname + window.location.search);
+          window.location.replace(frontendHost + window.location.pathname);
         }
       })();
     </script>
