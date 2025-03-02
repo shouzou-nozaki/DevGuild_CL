@@ -33,15 +33,15 @@
         const currentHost = window.location.origin;
         const redirected = new URLSearchParams(window.location.search).get("redirected");
     
-        if (currentHost === frontendHost) {
+        if (currentHost === frontendHost && !redirected) {
           // フロントエンドURLでリロードされた場合、バックエンドへリダイレクト
-          const newUrl = backendHost + window.location.pathname;
-          window.location.replace(newUrl);
+          const newUrl = backendHost + window.location.pathname + window.location.search;
+          window.location.replace(newUrl + (newUrl.includes('?') ? '&' : '?') + "redirected=true");
         } 
-        else if (currentHost === backendHost) {
+        else if (currentHost === backendHost && redirected === "backend") {
           // バックエンドURLに来たら、フロントエンドに戻す
-          const newUrl = frontendHost + window.location.pathname;
-          window.location.replace(newUrl);
+          const newUrl = frontendHost + window.location.pathname + window.location.search;
+          window.location.replace(newUrl + (newUrl.includes('?') ? '&' : '?') + "redirected=true");
         }
       })();
     </script>
