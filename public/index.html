@@ -25,6 +25,16 @@
       Learn how to configure a non-root public URL by running `npm run build`.
     -->
     <title>Dev.Guild</title>
+
+    <!-- リロード時のバックエンド転送 -->
+    <script>
+      (function() {
+        if (window.location.hostname === "devguild-cl.onrender.com") {
+          const newUrl = "https://dev-guild.onrender.com" + window.location.pathname;
+          window.location.replace(newUrl);
+        }
+      })();
+    </script>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
