@@ -29,11 +29,12 @@
     <script>
       (function() {
         const isFrontendHost = window.location.hostname === "devguild-cl.onrender.com";
-        const hasRedirected = localStorage.getItem("hasRedirected");
+        const isAlreadyRedirected = window.location.search.includes("redirected=true");
+
+        if(window.location.pathname === "/") return;
     
-        if (isFrontendHost && !hasRedirected) {
-          localStorage.setItem("hasRedirected", "true");
-          const newUrl = "https://dev-guild.onrender.com" + window.location.pathname;
+        if (isFrontendHost && !isAlreadyRedirected) {
+          const newUrl = "https://dev-guild.onrender.com" + window.location.pathname + "?redirected=true";
           window.location.replace(newUrl);
         }
       })();
