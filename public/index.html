@@ -27,11 +27,11 @@
     <title>Dev.Guild</title>
     <script>
       (function() {
-        const isFrontendHost = window.location.hostname === "devguild-cl.onrender.com";
+        // const isFrontendHost = window.location.hostname === "devguild-cl.onrender.com";
         const isAlreadyRedirected = window.location.search.includes("redirected=true");
     
-        if (isFrontendHost && !isAlreadyRedirected) {
-          const newUrl = "https://dev-guild.onrender.com" + window.location.pathname + "?redirected=true";
+        if (!isAlreadyRedirected) {
+          const newUrl = "https://dev-guild.onrender.com" + window.location.pathname;
           window.location.replace(newUrl);
         }
       })();
