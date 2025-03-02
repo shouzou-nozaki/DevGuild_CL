@@ -34,7 +34,7 @@
         if(window.location.pathname === "/") return;
     
         if (isFrontendHost && !isAlreadyRedirected) {
-          const newUrl = "https://dev-guild.onrender.com" + window.location.pathname + "?redirected=true";
+          const newUrl = "https://dev-guild.onrender.com" + window.location.pathname;
           window.location.replace(newUrl);
         }
       })();
