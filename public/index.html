@@ -26,38 +26,61 @@
     -->
     <title>Dev.Guild</title>
 
-    <script>
-      (function() {
-        const backendHost = "https://dev-guild.onrender.com";
-        const frontendHost = "https://devguild-cl.onrender.com";
-        const currentHost = window.location.origin;
-        const currentPath = window.location.pathname;
-        const urlParams = new URLSearchParams(window.location.search);
-        const redirectParam = urlParams.get("redirect");
-    
-        console.log("Current Host:", currentHost);
-        console.log("Current Path:", currentPath);
-        console.log("Redirect Param:", redirectParam);
-    
-        if (currentHost === frontendHost && !redirectParam) {
-          // フロントエンドURLで、まだリダイレクトパラメータが無い → バックエンドへリダイレクト
-          console.log("Redirecting to backend...");
-          window.location.replace(backendHost + currentPath + "?redirect=1");
-        } else if (currentHost === backendHost && redirectParam === "1") {
-          // バックエンドURLにおいて、リダイレクトパラメータが1 → フロントエンドへ戻す
-          console.log("Redirecting back to frontend...");
-          window.location.replace(frontendHost + currentPath + "?redirect=2");
-        } else if (currentHost === frontendHost && redirectParam === "2") {
-          // フロントエンドURLでリダイレクトパラメータが2 → クリーンなURLにする（パラメータ削除）
-          console.log("Cleaning URL, removing redirect param...");
-          urlParams.delete("redirect");
-          const newSearch = urlParams.toString();
-          const cleanUrl = frontendHost + currentPath + (newSearch ? "?" + newSearch : "");
-          window.history.replaceState(null, "", cleanUrl);
-        }
-      })();
-    </script>
-    
+    <!-- <script>
+      document.addEventListener("DOMContentLoaded", function() {
+          console.log("スクリプト実行開始");
+          const backendHost = "https://dev-guild.onrender.com";
+          const frontendHost = "https://devguild-cl.onrender.com";
+          const currentHost = window.location.origin;
+          const currentPath = window.location.pathname;
+  
+          console.log(`現在のホスト: ${currentHost}, パス: ${currentPath}`);
+  
+          // フロントエンドのルート("/")では何もしない
+          if (currentHost === frontendHost && currentPath === "/") {
+              console.log("ルートなのでリダイレクトせずに終了");
+              return;
+          }
+  
+          function setCookie(name, value, minutes) {
+              const d = new Date();
+              d.setTime(d.getTime() + (minutes * 60 * 1000));
+              document.cookie = `${name}=${value}; expires=${d.toUTCString()}; path=/; SameSite=None; Secure`;
+              console.log(`Cookie 設定: ${name}=${value}, document.cookieの現在値: ${document.cookie}`);
+          }
+  
+          function getCookie(name) {
+              console.log("Cookie 取得: ", document.cookie);
+              const cookies = document.cookie.split('; ');
+              for (const cookie of cookies) {
+                  const [key, value] = cookie.split('=');
+                  if (key === name) {
+                      console.log(`Cookie ヒット: ${name}=${value}`);
+                      return value;
+                  }
+              }
+              return null;
+          }
+  
+          if (currentHost === frontendHost) {
+              console.log("フロントエンドURLでリロードされた！ バックエンドにリダイレクト");
+              setCookie("redirectedFromFrontend", "true", 1);
+              window.location.replace(backendHost + window.location.pathname);
+          } 
+          else if (currentHost === backendHost) {
+              console.log("バックエンドURLに到達！");
+              const redirected = getCookie("redirectedFromFrontend");
+  
+              if (redirected) {
+                  console.log("バックエンドURLに来た！ フロントエンドに戻す");
+                  document.cookie = "redirectedFromFrontend=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+                  window.location.replace(frontendHost + window.location.pathname);
+              } else {
+                  console.log("リダイレクト不要");
+              }
+          }
+      });
+  </script> -->
   
 
   </head>
