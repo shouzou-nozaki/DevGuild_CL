@@ -18,6 +18,7 @@ const Header = () => {
     const eventSourceRef = useRef<EventSource | null>(null);
     const messageService = new MessageService();
     const [messageList, setMessageList] = useState<Array<Message>>([]); // メッセージリストの状態
+    const [menuOpen, setMenuOpen] = useState(false);
 
     /** 
      * ログアウト処理
@@ -95,12 +96,16 @@ const Header = () => {
 
     return (
         <header className="header">
-
             <div className="logo">
                 <Link to="/" >Dev.Guild</Link>
             </div>
 
-            <nav className="nav">
+            {/* ハンバーガーメニュー：スマホ用 */}
+            <button className="hamburger" onClick={() => setMenuOpen(!menuOpen)}>
+                ☰
+            </button>
+
+            <nav className={`nav ${menuOpen ? "open" : ""}`}>
                 <ul className="nav-list">
                     <li className="nav-item">
                         <Link to="/" className="project-list">プロジェクト一覧</Link>
@@ -148,10 +153,11 @@ const Header = () => {
             {/* 通知一覧ウィンドウ */}
             {isNotificationOpen && (
                 <div ref={notificationRef}>
-                    <NotificationList message={messageList}/>
+                    <NotificationList message={messageList} />
                 </div>
             )}
         </header>
+
     );
 };
 

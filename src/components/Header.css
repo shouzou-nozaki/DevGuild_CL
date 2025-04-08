@@ -146,3 +146,66 @@
     color: white;
 }
 
+/* ハンバーガーメニュー（デフォルトは非表示） */
+.hamburger {
+  display: none;
+  background: none;
+  font-size: 1.8rem;
+  border: none;
+  color: white;
+  cursor: pointer;
+  z-index: 1001; /* メニューの上に出るように */
+}
+@media screen and (max-width: 768px) {
+  /* ハンバーガー表示 */
+  .hamburger {
+      display: block;
+      position: absolute;
+      top: 0.5rem;
+      left: 0rem;
+
+  }
+
+  /* ナビを縦並びにして非表示 */
+  .header .nav {
+      display: none;
+      flex-direction: column;
+      align-items: flex-start;
+      background-color: #222;
+      position: absolute;
+      top: 3rem;
+      left: 0rem;
+      width: 50%;
+      padding: 1rem;
+  }
+
+  /* メニュー展開時に表示 */
+  .header .nav.open {
+      display: flex;
+  }
+
+  .header .nav-list {
+      flex-direction: column;
+      width: 100%;
+  }
+
+  .header .nav-item {
+      /* margin: 0.5rem 0; */
+      width: 90%;
+      font-size: 0.8rem;
+  }
+
+  .header .nav-item a,
+  .header .notify-button {
+      width: 80%;
+      text-align: center;
+  }
+
+  .header .user-menu {
+      margin-top: 1rem;
+      width: 100%;
+      text-align: left;
+      font-size: 0.8rem;
+  }
+
+}
